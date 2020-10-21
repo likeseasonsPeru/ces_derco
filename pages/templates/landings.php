@@ -1,6 +1,5 @@
 <?php
 $array_codigos = $_SESSION["user_stores"];
-print_r($array_codigos);
 $current_landing = $current_landing;
 
 foreach($array_codigos as $store_code => $key) {
@@ -49,7 +48,7 @@ foreach($array_codigos as $store_code => $key) {
 						<!--begin::Dropdown Menu-->
 						<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
 							<!--begin::Navigation-->
-							<ul class="navi flex-column navi-hover py-2">
+							<ul class="navi flex-column navi-hover py-2 editDropdown">
 								<!--li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Seleccione una tienda:</li-->
 								<?php echo $html_code; ?>
 							</ul>

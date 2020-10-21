@@ -62329,3 +62329,10 @@ body {
 @media (max-width: 425px) {
   .offcanvas-mobile {
     width: 90% !important; } }
+
+/*Edicion LIKESEASONS*/
+
+.editDropdown{
+  max-height: 400px;
+  overflow-y: auto;
+}

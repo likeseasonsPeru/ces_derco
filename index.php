@@ -23,11 +23,15 @@ $array_codigos = $_SESSION["user_stores"];
 
 if ($user_type == 'Administrador') {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
+	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
+	$current_store_code = '';
 } else {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter';
+	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
+	$current_store_code = $array_codigos[0]['store_code'];
 }
 
-$current_store_code = $array_codigos[0]['store_code'];
+
 
 ?>
 
@@ -174,7 +178,252 @@ $current_store_code = $array_codigos[0]['store_code'];
 			// Class definition
 			var KTDatatableRemoteAjaxLeads = function() {
 				// Private functions
+				var initTableLanding = function() {
+					
+					var code = global_current_store_code; //Variable Global
+					var current_landing = '<?php echo $current_landing; ?>';
+					var id_cotizador = '';
 
+					var startRange = $('#initDate').val();
+					var endRangeDate = $('#endDate').val();
+
+					console.log(startRange, endRangeDate);
+
+					if (startRange == '' && endRangeDate == '') {
+						startRange = '<?php echo $initDate; ?>';
+						endRangeDate = '<?php echo $endDate; ?>';
+					}
+
+					//console.log(current_landing);
+
+					$('#kt_datatable').KTDatatable('destroy');
+					$('#kt_datatable').KTDatatable('reload');
+					var datatable = $('#kt_datatable').KTDatatable({
+						
+						// datasource definition
+						data: {
+							type: 'remote',
+							source: {
+								read: {
+									url: '<?php echo $api_tiendas; ?>',
+									headers: {
+										'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo', 
+										'Accept': 'application/json',
+									},
+									//contentType: 'application/json',
+									params: {
+										url1_w2l: current_landing,
+										store: code,
+										date1: startRange,
+										date2: endRangeDate
+									},
+									map: function(raw) {
+										// sample data mapping
+										var dataSet = raw;
+										if (typeof raw.data !== 'undefined') {
+											dataSet = raw.data;
+											dataTableRaw = dataSet;
+										}
+										return dataSet;
+									},
+								},
+							},
+							pageSize: 50,
+							serverPaging: false,
+							serverFiltering: false,
+							serverSorting: false,
+						},
+
+						// layout definition
+						layout: {
+							scroll: false,
+							footer: false,
+						},
+
+						// column sorting
+						sortable: true,
+
+						pagination: true,
+
+						translate: {
+							records: {
+								processing: 'Cargando leads...',
+								noRecords: 'No se encontraron leads.',
+							},
+
+							toolbar: {
+								pagination: {
+									items: {
+										default: {
+											first: 'Inicio',
+											prev: 'Anterior',
+											next: 'Siguiente',
+											last: 'Fin',
+											more: 'Más páginas',
+											input: 'Número de página',
+											select: 'Máximo por página',
+										},
+
+										info: '{{start}} - {{end}} de {{total}} leads',
+									}
+								}
+							},
+						},
+
+						// columns definition
+						columns: [{
+							field: 'id',
+							title: '#',
+							sortable: 'asc',
+							width: 30,
+							type: 'number',
+							selector: false,
+							textAlign: 'center',
+						}, {
+							field: 'marca2',
+							title: 'Marca',
+						}, {
+							field: 'model_w2l',
+							title: 'Modelo',
+						}, {
+							field: 'version_w2l',
+							title: 'Versión',
+						}, {
+							field: 'rut_w2l',
+							title: 'Número de Documento',
+						},{
+							field: 'first_name',
+							title: 'Nombres',
+						}, {
+							field: 'last_name',
+							title: 'Apellidos',
+						}, {
+							field: 'fone1_w2l',
+							title: 'Celular',
+						}, {
+							field: 'created_at',
+							title: 'Creado',
+							autoHide: false,
+							type: 'date',
+							//format: 'DD/MM/YYYY HH:mm:ss',
+						}, {
+							field: 'estado',
+							title: 'Status',
+							overflow: 'visible',
+							autoHide: false,
+							// callback function support for column rendering
+							template: function(row) {
+								var status = {
+									'Nuevo': {
+										'title': 'Nuevo',
+										'class': ' label-light-success'
+									},
+									'Contactado': {
+										'title': 'Contactado',
+										'class': ' label-light-danger'
+									},
+									'Cotizado': {
+										'title': 'Cotizado',
+										'class': ' label-light-primary'
+									},
+									'Facturado': {
+										'title': 'Facturado',
+										'class': ' label-light-success'
+									},
+									'Cancelado': {
+										'title': 'Cancelado',
+										'class': ' label-light-info'
+									},
+									'Gestionado': {
+										'title': 'Gestionado',
+										'class': ' label-light-dark'
+									},
+								};
+								return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+							},
+						}, {
+							field: '_id',
+							title: 'ID Cotizador',
+							visible: false,
+							template: function (row) {
+								id_cotizador = row._id;
+								return id_cotizador; 
+							}
+						}, {
+							field: 'Actions',
+							title: 'Acciones',
+							sortable: false,
+							//width: 80,
+							overflow: 'visible',
+							autoHide: false,
+							template: function() {
+								return '\
+									<div class="dropdown dropdown-inline">\
+										<a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
+											<svg xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
+													<rect x="0" y="0" width="24" height="24"/>\
+													<path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero"\ transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "/>\
+													<rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"/>\
+												</g>\
+											</svg>\
+										</a>\
+										<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+											<ul class="navi flex-column navi-hover py-2">\
+												<li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">\
+													Cambiar estado:\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-star"></i></span>\
+														<span class="navi-text">Nuevo</span>\
+													</a>\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
+														<span class="navi-text">Contactado</span>\
+													</a>\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
+														<span class="navi-text">Cotizado</span>\
+													</a>\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Facturado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-handshake"></i></span>\
+														<span class="navi-text">Facturado</span>\
+													</a>\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-window-close"></i></span>\
+														<span class="navi-text">Cancelado</span>\
+													</a>\
+												</li>\
+												<li class="navi-item">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+														<span class="navi-icon"><i class="la la-window-close"></i></span>\
+														<span class="navi-text">Gestionado</span>\
+													</a>\
+												</li>\
+											</ul>\
+										</div>\
+									</div>\
+								';
+							},
+						}],
+					});
+
+
+					return {
+						datatable: function() {
+							return datatable;
+						}
+					};
+				};
 				// basic demo
 				var getLeads = function() {
 					
@@ -203,7 +452,7 @@ $current_store_code = $array_codigos[0]['store_code'];
 							type: 'remote',
 							source: {
 								read: {
-									url: '<?php echo $api_tiendas; ?>',
+									url: '<?php echo $update_por_tienda; ?>',
 									headers: {
 										'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo', 
 										'Accept': 'application/json',
@@ -454,7 +703,7 @@ $current_store_code = $array_codigos[0]['store_code'];
 				return {
 					// public functions
 					init: function() {
-						getLeads();
+						initTableLanding();
 						eventsCapture();
 					},
 

@@ -30,6 +30,7 @@ if($_POST)
 
     $sql_query = $cnx->query("SELECT * FROM usuarios WHERE user_email='$user_login' AND user_password='$user_password'")->fetchArray();
 
+    
     $id = $sql_query['id'];
     $id_society = $sql_query['id_society'];
     $nombre = $sql_query['user_name'];
@@ -41,7 +42,12 @@ if($_POST)
         $user_type = 'CES';
     }
 
-    $sql_query = $cnx->query("SELECT * FROM tiendas WHERE id_society='$id_society'")->fetchAll();
+    if($user_type == 'Administrador'){
+        $sql_query = $cnx->query("SELECT * FROM tiendas")->fetchAll();
+    }else{
+        $sql_query = $cnx->query("SELECT * FROM tiendas WHERE id_society='$id_society'")->fetchAll();
+    }
+    //$sql_query = $cnx->query("SELECT * FROM tiendas WHERE id_society='$id_society'")->fetchAll();
     
     $store_codes = [];
 

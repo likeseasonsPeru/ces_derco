@@ -28,7 +28,12 @@ if ($user_type == 'Administrador') {
 } else {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
-	$current_store_code = $array_codigos[0]['store_code'];
+
+	$arrayStoresCES = [];
+	foreach($array_codigos as $tienda){
+		array_push($arrayStoresCES, $tienda['store_code']);
+	}
+	$current_store_code = json_encode($arrayStoresCES);
 }
 
 
@@ -167,6 +172,17 @@ if ($user_type == 'Administrador') {
 		<script>
 			//Global Variables
 			var global_current_store_code = '<?php echo $current_store_code; ?>';
+			if(global_current_store_code != ''){
+				global_current_store_code = JSON.parse(global_current_store_code);
+                //console.log("global_current_store_code", global_current_store_code)
+			}
+			var isAdministrador = '<?= $user_type; ?>';
+			//Condicionar para administrador
+			var consesionariosAdministrador =  '';
+			if(isAdministrador == 'Administrador'){
+				consesionariosAdministrador = JSON.parse('<?= json_encode($array_codigos) ?>');
+			}
+
 			var initDate = $('#initDate').val();
 			var endDate = $('#endDate').val();
 			var dataTableRaw = '';
@@ -181,6 +197,8 @@ if ($user_type == 'Administrador') {
 				var initTableLanding = function() {
 					
 					var code = global_current_store_code; //Variable Global
+					$('#codeConcesionario').val('Todas');
+					
 					var current_landing = '<?php echo $current_landing; ?>';
 					var id_cotizador = '';
 
@@ -192,6 +210,8 @@ if ($user_type == 'Administrador') {
 					if (startRange == '' && endRangeDate == '') {
 						startRange = '<?php echo $initDate; ?>';
 						endRangeDate = '<?php echo $endDate; ?>';
+						$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
 					}
 
 					//console.log(current_landing);
@@ -427,18 +447,41 @@ if ($user_type == 'Administrador') {
 				// basic demo
 				var getLeads = function() {
 					
-					var code = global_current_store_code; //Variable Global
+					var codeConcesionario = global_current_store_code; //Variable Global
+					
+                    console.log("getLeads -> isAdministrador", isAdministrador)
+					//Condicionar para administrador
+					var arrayCodes = [];
+					if(isAdministrador == 'Administrador'){
+						consesionariosAdministrador.map(concesionario => {
+						if(concesionario.id_concesionario == codeConcesionario){
+							concesionario.tiendas.map(tienda => {
+								arrayCodes.push(tienda.code);
+							})
+							$('#codeConcesionario').val(concesionario.concesionario);
+						}
+					});
+					}else{
+						arrayCodes.push(codeConcesionario);
+					}
+
+					code = arrayCodes;
+					
 					var current_landing = '<?php echo $current_landing; ?>';
 					var id_cotizador = '';
 
 					var startRange = $('#initDate').val();
 					var endRangeDate = $('#endDate').val();
+					$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
 
 					console.log(startRange, endRangeDate);
 
 					if (startRange == '' && endRangeDate == '') {
 						startRange = '<?php echo $initDate; ?>';
 						endRangeDate = '<?php echo $endDate; ?>';
+						$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
 					}
 
 					//console.log(current_landing);
@@ -480,7 +523,6 @@ if ($user_type == 'Administrador') {
 							serverFiltering: false,
 							serverSorting: false,
 						},
-
 						// layout definition
 						layout: {
 							scroll: false,
@@ -757,6 +799,10 @@ if ($user_type == 'Administrador') {
 
 			function updateDateRange() {
 				KTDatatableRemoteAjaxLeads.reloadData();
+			}
+			
+			function setTodasTable(){
+				KTDatatableRemoteAjaxLeads.init();
 			}
 
 			function downloadExcel() {

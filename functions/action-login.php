@@ -43,19 +43,33 @@ if($_POST)
     }
 
     if($user_type == 'Administrador'){
-        $sql_query = $cnx->query("SELECT * FROM tiendas")->fetchAll();
+        $sql_concesionarios = $cnx->query("SELECT distinct sociedades.id_society, sociedades.society FROM dercoper_gestorces.sociedades")->fetchAll();
+
+        $sql_query = $cnx->query("SELECT distinct  tiendas.code, sociedades.society, tiendas.id_society, tiendas.name, tiendas.store_type, tiendas.district, tiendas.province
+                                  FROM dercoper_gestorces.tiendas, dercoper_gestorces.sociedades
+                                  WHERE sociedades.id_society = tiendas.id_society AND tiendas.code != ''")->fetchAll();
     }else{
         $sql_query = $cnx->query("SELECT * FROM tiendas WHERE id_society='$id_society'")->fetchAll();
     }
-    //$sql_query = $cnx->query("SELECT * FROM tiendas WHERE id_society='$id_society'")->fetchAll();
-    
     $store_codes = [];
-
-    foreach ($sql_query as $tienda => $value) {
-        $store_codes[$tienda]['store_code'] = $value['code'];
-        $store_codes[$tienda]['store_name'] = $value['name'];
+    if($user_type == 'Administrador'){
+        foreach ($sql_concesionarios as $concesionario => $value){
+            $store_codes[$concesionario]['id_concesionario'] = $value['id_society'];
+            $store_codes[$concesionario]['concesionario'] = $value['society'];
+            $store_codes[$concesionario]['tiendas'] = [];
+            foreach($sql_query as $tienda){
+                if($value['society'] == $tienda['society']){
+                    array_push($store_codes[$concesionario]['tiendas'],$tienda);
+                }
+            }
+        }
+    }else{
+        foreach ($sql_query as $tienda => $value) {
+            $store_codes[$tienda]['store_code'] = $value['code'];
+            $store_codes[$tienda]['store_name'] = $value['name'];
+        }
     }
-
+    
     if($id != null) {
         $proceed = true;
     } else {

@@ -28,7 +28,12 @@ if ($user_type == 'Administrador') {
 } else {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
-	$current_store_code = $array_codigos[0]['store_code'];
+
+	$arrayStoresCES = [];
+	foreach($array_codigos as $tienda){
+		array_push($arrayStoresCES, $tienda['store_code']);
+	}
+	$current_store_code = json_encode($arrayStoresCES);
 }
 
 
@@ -136,6 +141,101 @@ if ($user_type == 'Administrador') {
 						"dark": "#ffffff"
 					}
 				},
+				"font-family": "Poppins"
+			};
+		</script>
+		<!--end::Global Config-->
+
+		<!--begin::Global Theme Bundle(used by all pages)-->
+		<script src="assets/plugins/global/plugins.bundle.js"></script>
+		<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+		<script src="assets/js/scripts.bundle.js"></script>
+
+		<!--end::Global Theme Bundle-->
+
+		<!--begin::Page Vendors(used by this page)-->
+		<script src="assets/js/pages/widgets.js"></script>
+		<script type="text/javascript" src="assets/js/pages/custom/xlsx/xlsx.full.min.js"></script>
+		<!--end::Page Vendors-->
+
+		<!--begin::Page Scripts(used by this page)-->
+		<script>
+			//Global Variables
+			var global_current_store_code = '<?php echo $current_store_code; ?>';
+			if(global_current_store_code != ''){
+				global_current_store_code = JSON.parse(global_current_store_code);
+                //console.log("global_current_store_code", global_current_store_code)
+			}
+			var isAdministrador = '<?= $user_type; ?>';
+			//Condicionar para administrador
+			var consesionariosAdministrador =  '';
+			if(isAdministrador == 'Administrador'){
+				consesionariosAdministrador = JSON.parse('<?= json_encode($array_codigos) ?>');
+			}
+
+			var initDate = $('#initDate').val();
+			var endDate = $('#endDate').val();
+			var dataTableRaw = '';
+			if (initDate == '' && endDate == '') {
+				initDate = '<?php echo $initDate; ?>';
+				endDate = '<?php echo $endDate; ?>';
+			}
+
+			// Class definition
+			var KTDatatableRemoteAjaxLeads = function() {
+				// Private functions
+				var initTableLanding = function() {
+					
+					var code = global_current_store_code; //Variable Global
+					$('#codeConcesionario').val('Todas');
+					
+					var current_landing = '<?php echo $current_landing; ?>';
+					var id_cotizador = '';
+
+					var startRange = $('#initDate').val();
+					var endRangeDate = $('#endDate').val();
+
+					console.log(startRange, endRangeDate);
+
+					if (startRange == '' && endRangeDate == '') {
+						startRange = '<?php echo $initDate; ?>';
+						endRangeDate = '<?php echo $endDate; ?>';
+						$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
+					}
+
+					//console.log(current_landing);
+
+					$('#kt_datatable').KTDatatable('destroy');
+					$('#kt_datatable').KTDatatable('reload');
+					var datatable = $('#kt_datatable').KTDatatable({
+						
+						// datasource definition
+						data: {
+							type: 'remote',
+							source: {
+								read: {
+									url: '<?php echo $api_tiendas; ?>',
+									headers: {
+										'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo', 
+										'Accept': 'application/json',
+									},
+									//contentType: 'application/json',
+									params: {
+										url1_w2l: current_landing,
+										store: code,
+										date1: startRange,
+										date2: endRangeDate
+									},
+									map: function(raw) {
+										// sample data mapping
+										var dataSet = raw;
+										if (typeof raw.data !== 'undefined') {
+											dataSet = raw.data;
+											dataTableRaw = dataSet;
+										}
+										return dataSet;
+									},
 				"gray": {
 					"gray-100": "#F3F6F9",
 					"gray-200": "#EBEDF3",
@@ -680,6 +780,36 @@ if ($user_type == 'Administrador') {
 						return datatable;
 					}
 				};
+				// basic demo
+				var getLeads = function() {
+					
+					var codeConcesionario = global_current_store_code; //Variable Global
+					
+                    console.log("getLeads -> isAdministrador", isAdministrador)
+					//Condicionar para administrador
+					var arrayCodes = [];
+					if(isAdministrador == 'Administrador'){
+						consesionariosAdministrador.map(concesionario => {
+						if(concesionario.id_concesionario == codeConcesionario){
+							concesionario.tiendas.map(tienda => {
+								arrayCodes.push(tienda.code);
+							})
+							$('#codeConcesionario').val(concesionario.concesionario);
+						}
+					});
+					}else{
+						arrayCodes.push(codeConcesionario);
+					}
+
+					code = arrayCodes;
+					
+					var current_landing = '<?php echo $current_landing; ?>';
+					var id_cotizador = '';
+
+					var startRange = $('#initDate').val();
+					var endRangeDate = $('#endDate').val();
+					$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
 			};
 
 			var eventsCapture = function() {
@@ -706,9 +836,18 @@ if ($user_type == 'Administrador') {
 				});
 			};
 
+
 			var eventsWriter = function(string) {
 				console.log(string);
 			};
+
+
+					if (startRange == '' && endRangeDate == '') {
+						startRange = '<?php echo $initDate; ?>';
+						endRangeDate = '<?php echo $endDate; ?>';
+						$('#fechaInicial').val(startRange);
+						$('#fechaFinal').val(endRangeDate);
+					}
 
 			return {
 				// public functions
@@ -771,6 +910,11 @@ if ($user_type == 'Administrador') {
 								},
 							},
 						},
+						// layout definition
+						layout: {
+							scroll: false,
+							footer: false,
+
 						pageSize: 50,
 						serverPaging: false,
 						serverFiltering: false,
@@ -792,6 +936,7 @@ if ($user_type == 'Administrador') {
 						records: {
 							processing: 'Cargando leads...',
 							noRecords: 'No se encontraron leads.',
+
 						},
 
 						toolbar: {
@@ -1312,10 +1457,19 @@ if ($user_type == 'Administrador') {
 			KTDatatableRemoteAjaxLeads.reloadData();
 		}
 
+			function updateDateRange() {
+				KTDatatableRemoteAjaxLeads.reloadData();
+			}
+			
+			function setTodasTable(){
+				KTDatatableRemoteAjaxLeads.init();
+			}
+
 		function updateStoreIdAmicar(store_id) {
 			global_current_store_code = store_id;
 			KTDatatableLocalDataLeads.reloadData();
 		}
+
 
 		function updateDateRange() {
 			KTDatatableRemoteAjaxLeads.reloadData();

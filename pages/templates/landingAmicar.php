@@ -78,7 +78,7 @@ foreach($array_codigos as $store_code => $key) {
 						<button type="button" class="btn btn-primary" onclick="updateDateRangeAmicar()">Filtrar</button>
 					</div>
 					<div class="col-sm-8 text-right">
-					<button type="button" class="btn btn-success" onclick="downloadExcel()">Descargar Excel</button>
+					<button type="button" class="btn btn-success" onclick="downloadExcelAmicar()">Descargar Excel</button>
 					</div>
 				</div>
 				<div class="datatable datatable-bordered datatable-head-custom" id="kt_datatableAmicar"></div>

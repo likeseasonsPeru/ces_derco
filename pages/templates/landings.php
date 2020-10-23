@@ -1,22 +1,39 @@
 <?php
 $array_codigos = $_SESSION["user_stores"];
 $current_landing = $current_landing;
-
-foreach($array_codigos as $store_code => $key) {
-	/*if($store_code != '') {
-		
-	}*/
-
-	$js_store_code = "'".$array_codigos[$store_code]['store_code']."'";
-
-	$html_code .= '<li class="navi-item">';
-	$html_code .= '<a href="javascript:void(0);" onclick="updateStoreId('.$js_store_code.');" class="navi-link">'; // llamar al JS de tienda
-	$html_code .= '<span class="navi-icon">';
-	$html_code .= '<i class="la la-store"></i>';
-	$html_code .= '</span>';
-	$html_code .= '<span class="navi-text">'.$array_codigos[$store_code]['store_name'].' - ('.$array_codigos[$store_code]['store_code'].')</span>';
-	$html_code .= '</a>';
-	$html_code .= '</li>';
+$html_code = '';
+if($tipo_usuario == "Administrador"){
+	$textoSelect = 'Seleccione un concesionario';
+	foreach($array_codigos as $concesionario) {
+		$js_store_code = "".json_encode($concesionario['id_concesionario'])."";
+	
+		$html_code .= '<li class="navi-item">';
+		$html_code .= '<a href="javascript:void(0);" onclick="updateStoreId('.$js_store_code.')" class="navi-link">'; // llamar al JS de tienda
+		$html_code .= '<span class="navi-icon">';
+		$html_code .= '<i class="la la-store"></i>';
+		$html_code .= '</span>';
+		$html_code .= '<span class="navi-text">'.$concesionario['concesionario'].' - ('.count($concesionario['tiendas']).' - Tiendas)</span>';
+		$html_code .= '</a>';
+		$html_code .= '</li>';
+	}
+}else{
+	$textoSelect = 'Seleccione una tienda';
+	foreach($array_codigos as $store_code => $key) {
+		/*if($store_code != '') {
+			
+		}*/
+	
+		$js_store_code = "'".$array_codigos[$store_code]['store_code']."'";
+	
+		$html_code .= '<li class="navi-item">';
+		$html_code .= '<a href="javascript:void(0);" onclick="updateStoreId('.$js_store_code.');" class="navi-link">'; // llamar al JS de tienda
+		$html_code .= '<span class="navi-icon">';
+		$html_code .= '<i class="la la-store"></i>';
+		$html_code .= '</span>';
+		$html_code .= '<span class="navi-text">'.$array_codigos[$store_code]['store_name'].' - ('.$array_codigos[$store_code]['store_code'].')</span>';
+		$html_code .= '</a>';
+		$html_code .= '</li>';
+	}
 }
 
 ?>

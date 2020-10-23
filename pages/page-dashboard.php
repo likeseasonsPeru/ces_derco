@@ -1,7 +1,6 @@
 <?php
 
 error_reporting(E_ALL);
-$current_landing = $current_landing;
 function arrayCastRecursive($array)
 {
     if (is_array($array)) {

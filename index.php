@@ -1313,34 +1313,29 @@ if ($user_type == 'Administrador') {
 
 			var updateLeadStatusAmicar = function(id, estado) {
 				var myHeaders = new Headers();
-				myHeaders.append("Accept", "application/json");
-				myHeaders.append("Content-Type", "application/json");
+				myHeaders.append("Accept", "application/json"); 
+				myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-				var formData = new FormData();
-				formData.append("id", id);
-				formData.append("estado", estado);
-
-				var requestOptions = {
-					method: 'POST',
-					headers: myHeaders,
-					body: formData,
-					redirect: 'follow'
-				};
-
-				fetch("https://derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php", requestOptions)
-					.then((response) => response.json()) // Transform the data into json
-					.then(function(data) {
-						let respuesta = data.status;
-
-						if (data.status) {
+				$.ajax({
+					url: 'https://derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php',
+					type: 'POST',
+					data: {
+						id: id,
+						estado: estado
+					},
+					dataType : 'json',
+					success: function (response) {
+						if (response.status) {
+							console.log(response);
 							KTDatatableLocalDataLeads.reloadData();
 						} else {
 							console.log('Error');
-						}
-					})
-					.catch(function(error) {
-						console.log(error);
-					});
+						}	
+					},
+					error: function(err){
+						console.log('Error al actualizar el estado')
+					}
+				})
 			}
 
 			function updateStoreId(store_id) {
@@ -1368,10 +1363,49 @@ if ($user_type == 'Administrador') {
 			function downloadExcel() {
 
 				var createXLSLFormatObj = [];
-				var xlsHeader = ['#', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL','DIRECCIÓN', 'DISTRITO', 'ESTADO', ' - ','FECHA DE REGISTRO'];
+				var xlsHeader = ['DOCUMENTO DE IDENTIDAD', 'MARCA', 'MODELO', 'TIENDA', 'FECHA DE RECEPCION', 'CONTACTADO', 'PROSPECTO', 'RESERVA', 'FACTURADO', 'CANCELADO'];
 
 				var xlsRows = [];
-				xlsRows.push(dataTableRaw);
+
+				let xlsRowsMap = dataTableRaw.map(({
+					_id,
+					id,
+					id_w2l,
+					first_name,
+					last_name,
+					fone1_w2l,
+					email,
+					state,
+					url1_w2l,
+					url2_w2l,
+					brand_w2l,
+					version_w2l,
+					sap_w2l,
+					price_w2l,
+					cod_origen2_w2l,
+					store,
+					terms,
+					tipo_documento,
+					razon_social,
+					direccion,
+					distrito,
+					estado,
+					updated_at,
+					...keepFields
+				}) => keepFields);
+
+				let xlsRowsFinal = xlsRowsMap.map(row => {
+					const { updateFecha, ...keepFields } = row;
+					let newrow = {};
+					newrow = {...newrow, ...{Contactado: updateFecha.contactado_date ? 'SI' : 'NO'}}
+					newrow = {...newrow, ...{Prospecto: updateFecha.cotizado_date ? 'SI' : 'NO'}}
+					newrow = {...newrow, ...{Reserva: updateFecha.gestionado_date ? 'SI' : 'NO'}}
+					newrow = {...newrow, ...{Facturado: updateFecha.facturado_date ? 'SI' : 'NO'}}
+					newrow = {...newrow, ...{Cancelado: updateFecha.cancelado_date ? 'SI' : 'NO'}}
+					return {...keepFields, ...newrow};
+				})
+
+				xlsRows.push(xlsRowsFinal);
 
 				createXLSLFormatObj.push(xlsHeader);
 

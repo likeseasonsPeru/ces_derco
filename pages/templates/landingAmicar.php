@@ -1,7 +1,7 @@
 <?php
 $array_codigos = $_SESSION["user_stores"];
 $tipo_usuario = $_SESSION["user_type"];
-$current_landing = $current_landing;
+$current_landing = '';
 $html_code = '';
 
 

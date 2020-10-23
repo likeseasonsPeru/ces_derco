@@ -1,4 +1,10 @@
-
+<?php
+$tipo_usuario = $_SESSION["user_type"];
+$isAdmin = false;
+if($tipo_usuario== 'Administrador') {
+	$isAdmin = true;
+}
+?>
 <!--begin::Aside-->
 				<div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
 
@@ -209,7 +215,7 @@
 										</ul>
 									</div>
 								</li>
-								<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+								<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover" style="<?php if($isAdmin) echo 'display:block'; else{echo 'display:none';} ?>">
 									<a href="?page=amicar" class="menu-link">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->

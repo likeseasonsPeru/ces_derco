@@ -2404,7 +2404,7 @@ select.selectpicker {
   margin-bottom: 0;
   padding: 0;
   border: none;
-  height: auto; }
+  /*height: auto; */ }
 
 :not(.input-group) > .bootstrap-select.form-control:not([class*="col-"]) {
   width: 100%; }

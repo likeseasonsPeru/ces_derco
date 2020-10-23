@@ -1,7 +1,14 @@
 <?php
 
 error_reporting(E_ALL);
-$current_landing = $current_landing;
+$array_codigos = $_SESSION["user_stores"];
+print_r($array_codigos);
+$tipo_usuario = $_SESSION["user_type"];
+$current_landing = '';
+$current_landing = '';
+
+
+
 function arrayCastRecursive($array)
 {
     if (is_array($array)) {
@@ -62,14 +69,20 @@ function getData($array, $titulo){
 }
 $fecha_inicio = date('Y-m-d');
 $fecha_end = date('Y-m-d');
-if(isset($_POST['start'])){
+$optionDashboard = 'Por Campaña';
+if(isset($_POST['start']) && $_POST['start'] != ''){
     $old_date = explode('/', $_POST['start']); 
     $fecha_inicio = $old_date[2].'-'.$old_date[0].'-'.$old_date[1];
 }
-if(isset($_POST['end'])){
+if(isset($_POST['end']) && $_POST['end'] != ''){
     $old_date = explode('/', $_POST['end']); 
     $fecha_end = $old_date[2].'-'.$old_date[0].'-'.$old_date[1];
 }
+
+if(isset($_POST['optionDashboard'])){
+   $optionDashboard = $_POST['optionDashboard'];
+}
+
 
 $dataQuadro = '';
 $isAdmin = false;
@@ -107,31 +120,152 @@ if($_SESSION['user_type'] == 'Administrador') {
     $totales_response = json_decode($response);
     //Conversion a array
     $nuevo_array = arrayCastRecursive($totales_response);
-    //Division por Campaña (Link)
-    $arrayCatalogoDerco = array();
-    $arrayCyberGO = array();
-    $arrayDercoOulet = array();
-    foreach($nuevo_array as $lead){
-        if($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/'){
-            array_push($arrayCatalogoDerco, $lead);
-        }else if($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/'){
-            array_push($arrayDercoOulet, $lead);
-        }else if($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/'){
-            array_push($arrayCyberGO, $lead);
-        }
-    }
 
-    $arrayTablaFinal = array();
-    array_push($arrayTablaFinal,getData($nuevo_array, 'Total de Leads General'));
-    array_push($arrayTablaFinal,getData($arrayCatalogoDerco, 'Catálogo Derco'));
-    array_push($arrayTablaFinal,getData($arrayDercoOulet, 'DercoOulet'));
-    array_push($arrayTablaFinal,getData($arrayCyberGO, 'Cyber GO'));
+    if($optionDashboard == 'Por Campaña'){
+        //Division por Campaña (Link)
+        $arrayCatalogoDerco = array();
+        $arrayCyberGO = array();
+        $arrayDercoOulet = array();
+        foreach($nuevo_array as $lead){
+            if($lead['url1_w2l'] != ''){
+                if($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/'){
+                    array_push($arrayCatalogoDerco, $lead);
+                }else if($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/'){
+                    array_push($arrayDercoOulet, $lead);
+                }else if($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/'){
+                    array_push($arrayCyberGO, $lead);
+                }
+            }
+        }
+
+        $arrayTablaFinal = array();
+        array_push($arrayTablaFinal,getData($nuevo_array, 'Total de Leads General'));
+        array_push($arrayTablaFinal,getData($arrayCatalogoDerco, 'Catálogo Derco'));
+        array_push($arrayTablaFinal,getData($arrayDercoOulet, 'DercoOulet'));
+        array_push($arrayTablaFinal,getData($arrayCyberGO, 'Cyber GO'));
+        
+        $contadorRows = 0;
+        foreach($arrayTablaFinal as $data){
+            $catalogo_conversiones = 0;
+            if($data['total_leads'] != 0){
+                $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
+            }
+            $dataQuadro .= '
+            <tr>
+            <th scope="row">'.($contadorRows + 1).'</th>
+            <td>'.$data['titulo'].'</td>
+            <td>'.$data['total_leads'].'</td>
+            <td>'.number_format($catalogo_conversiones, 5, ',', '').'</td>
+            <td>'.$data['total_nuevos'].'</td>
+            <td>'.$data['total_contactado'].'</td>
+            <td>'.$data['total_cotizado'].'</td>
+            <td>'.$data['total_facturado'].'</td>
+            <td>'.$data['total_cancelado'].'</td>
+            <td>'.$data['total_gestionado'].'</td>
+            </tr>
+            ';
+            $contadorRows++;
+        }
+    }else{
+        /* 
+        $arrayTotalConcesionarios = [];
+        loop {
+            arrayvacio = []
+            si (existe el codigo en el concesionario){
+                arrayvacio['codigo de concesionario'][0] = 
+            }
+            arry_pusj(arrayTotalConcesionarios, arrayVacioo )
+        }
+        */
+        return
+
+    }
     
-    
-    foreach($arrayTablaFinal as $data){
-        $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
-        $dataQuadro .= '
-        <div class="col-lg-6 col-xl-4">
+    curl_close($curl);
+}else {
+    return;
+}
+?>
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+        <!--begin::Dashboard-->
+
+        <div class="col-sm-5 text-left mb-5"
+            style="<?php if($isAdmin) echo 'display:block'; else{echo 'display:none';} ?>">
+            <form action="index.php?page=dashboard" method="POST">
+                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard"
+                    tabindex="-98">
+                    <option selected disabled>Seleccione una opción</option>
+                    <option>Por Concesionarios</option>
+                    <option>Por Campañas</option>
+                </select>
+                <span>Rango de fechas:</span>
+                <div class="input-daterange input-group" id="kt_datepicker_5">
+                    <input id="initDate" type="text" class="form-control" name="start" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="la la-ellipsis-h"></i>
+                        </span>
+                    </div>
+                    <input id="endDate" type="text" class="form-control" name="end" />
+                </div>
+                <span class="form-text text-muted">Seleccione un rango de fechas</span>
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <div class="mt-6">
+                    <h5>
+                        Opción: <?= $optionDashboard; ?>
+                    </h5>
+                    <h5>
+                        Fecha Inicio: <?= $fecha_inicio; ?>
+                    </h5>
+                    <h5>
+                        Fecha Fin: <?= $fecha_end; ?>
+                    </h5>
+                </div>
+            </form>
+        </div>
+        <!--begin::Row-->
+        <div class="row">
+            <!-- CATALOGO DERCO -->
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr class="table-dark">
+                            <th scope="col">#</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">% Conversiones</th>
+                            <th scope="col">Nuevos</th>
+                            <th scope="col">Contactados</th>
+                            <th scope="col">Cotizados</th>
+                            <th scope="col">Cancelados</th>
+                            <th scope="col">Facturados</th>
+                            <th scope="col">Gestionados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?= $dataQuadro; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Row-->
+        <!--end::Dashboard-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+
+
+<!--end::Viejo Cuadro de Dashboard-->
+<?php
+
+/*
+$oldDataQuadro = '
+<div class="col-lg-6 col-xl-4">
         <!--begin::Mixed Widget 1-->
         <div class="card card-custom bg-gray-100 card-stretch gutter-b">
             <!--begin::Header-->
@@ -266,50 +400,6 @@ if($_SESSION['user_type'] == 'Administrador') {
         </div>
         <!--end::Mixed Widget 1-->
     </div>
-        ';
-    }
-    
-    curl_close($curl);
-}else {
-    return;
-}
+';
+*/
 ?>
-
-<!--begin::Entry-->
-<div class="d-flex flex-column-fluid">
-    <!--begin::Container-->
-    <div class="container">
-        <!--begin::Dashboard-->
-        <div class="col-sm-5 text-left mb-5" style="<?php if($isAdmin) echo 'display:block'; else{echo 'display:none';} ?>">
-            <form action="index.php?page=dashboard" method="POST">
-                <span>Rango de fechas:</span>
-                <div class="input-daterange input-group" id="kt_datepicker_5">
-                    <input id="initDate" type="text" class="form-control" name="start" />
-                    <div class="input-group-append">
-                        <span class="input-group-text">
-                            <i class="la la-ellipsis-h"></i>
-                        </span>
-                    </div>
-                    <input id="endDate" type="text" class="form-control" name="end" />
-                </div>
-                <span class="form-text text-muted">Seleccione un rango de fechas</span>
-                <button type="submit" class="btn btn-primary">Filtrar</button>
-                <h4>
-                    Fecha Inicio Filtro: <?= $fecha_inicio; ?>
-                </h4>
-                <h4>
-                    Fecha Fin Filtro: <?= $fecha_end; ?>
-                </h4>
-            </form>
-        </div>
-        <!--begin::Row-->
-        <div class="row">
-            <!-- CATALOGO DERCO -->
-            <?= $dataQuadro; ?>
-        </div>
-        <!--end::Row-->
-        <!--end::Dashboard-->
-    </div>
-    <!--end::Container-->
-</div>
-<!--end::Entry-->

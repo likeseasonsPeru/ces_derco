@@ -115,7 +115,7 @@ if($tipo_usuario == "Administrador"){
 				<div class="row">
 					<div class="col-12 mt-4">
 						<label for="codeConcesionario">Tienda o concesionario: </label>
-						<input style="min-width: 250px;" id="codeConcesionario" type="text" disabled="true">
+						<input style="min-width: 300px;" id="codeConcesionario" type="text" disabled="true">
 					</div>
 					<div class="col-12 mt-4">
 						<label for="codeConcesionario">Fecha Inicial: </label>

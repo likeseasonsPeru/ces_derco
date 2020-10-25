@@ -20,7 +20,7 @@ $user_type = $_SESSION["user_type"];
 $nombre = $_SESSION["user_name"];
 $correo = $_SESSION["user_email"];
 $array_codigos = $_SESSION["user_stores"];
-
+print_r($array_codigos);
 if ($user_type == 'Administrador') {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
@@ -178,11 +178,8 @@ if ($user_type == 'Administrador') {
 			}
 			var isAdministrador = '<?= $user_type; ?>';
 			//Condicionar para administrador
-			var consesionariosAdministrador =  '';
-			if(isAdministrador == 'Administrador'){
-				consesionariosAdministrador = JSON.parse('<?= json_encode($array_codigos) ?>');
-				console.log('Los codigos de concesionarios son',consesionariosAdministrador)
-			}
+			var consesionariosData = JSON.parse('<?= json_encode($array_codigos) ?>');
+			
 
 			var initDate = $('#initDate').val();
 			var endDate = $('#endDate').val();
@@ -461,7 +458,7 @@ if ($user_type == 'Administrador') {
 					//Condicionar para administrador
 					var arrayCodes = [];
 					if(isAdministrador == 'Administrador'){
-						consesionariosAdministrador.map(concesionario => {
+						consesionariosData.map(concesionario => {
 						if(concesionario.id_concesionario == codeConcesionario){
 							concesionario.tiendas.map(tienda => {
 								arrayCodes.push(tienda.code);
@@ -470,7 +467,11 @@ if ($user_type == 'Administrador') {
 						}
 					});
 					}else{
-						console.log(codeConcesionario);
+						consesionariosData.map(concesionario => {
+							if (concesionario.store_code == codeConcesionario){
+								$('#codeConcesionario').val(concesionario.store_name);
+							}
+						})
 						arrayCodes.push(codeConcesionario);
 					}
 

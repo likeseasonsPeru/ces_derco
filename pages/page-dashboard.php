@@ -2,7 +2,8 @@
 
 error_reporting(E_ALL);
 $array_codigos = $_SESSION["user_stores"];
-print_r($array_codigos);
+/*   */
+/* print_r($array_codigos); */
 $tipo_usuario = $_SESSION["user_type"];
 $current_landing = '';
 $current_landing = '';
@@ -17,17 +18,18 @@ function arrayCastRecursive($array)
                 $array[$key] = arrayCastRecursive($value);
             }
             if ($value instanceof stdClass) {
-                $array[$key] = arrayCastRecursive((array)$value);
+                $array[$key] = arrayCastRecursive((array) $value);
             }
         }
     }
     if ($array instanceof stdClass) {
-        return arrayCastRecursive((array)$array);
+        return arrayCastRecursive((array) $array);
     }
     return $array;
 }
 
-function getData($array, $titulo){
+function getData($array, $titulo)
+{
     //Datos totales
     $total_nuevos = 0;
     $total_contactado = 0;
@@ -36,19 +38,19 @@ function getData($array, $titulo){
     $total_cancelado = 0;
     $total_gestionado = 0;
 
-    foreach($array as $lead){
-           //Datos del total de leads
-        if($lead['estado'] == 'Nuevo'){
+    foreach ($array as $lead) {
+        //Datos del total de leads
+        if ($lead['estado'] == 'Nuevo') {
             $total_nuevos++;
-        }else if($lead['estado'] == 'Gestionado'){
+        } else if ($lead['estado'] == 'Gestionado') {
             $total_gestionado++;
-        }else if($lead['estado'] == 'Contactado'){
+        } else if ($lead['estado'] == 'Contactado') {
             $total_contactado++;
-        }else if($lead['estado'] == 'Cotizado'){
+        } else if ($lead['estado'] == 'Cotizado') {
             $total_cotizado++;
-        }else if($lead['estado'] == 'Facturado'){
+        } else if ($lead['estado'] == 'Facturado') {
             $total_facturado++;
-        }else if($lead['estado'] == 'Cancelado'){
+        } else if ($lead['estado'] == 'Cancelado') {
             $total_cancelado++;
         }
     }
@@ -65,125 +67,217 @@ function getData($array, $titulo){
     );
 
     return $datosPerLanding;
-
 }
 $fecha_inicio = date('Y-m-d');
 $fecha_end = date('Y-m-d');
 $optionDashboard = 'Por Campaña';
-if(isset($_POST['start']) && $_POST['start'] != ''){
-    $old_date = explode('/', $_POST['start']); 
-    $fecha_inicio = $old_date[2].'-'.$old_date[0].'-'.$old_date[1];
+if (isset($_POST['start']) && $_POST['start'] != '') {
+    $old_date = explode('/', $_POST['start']);
+    $fecha_inicio = $old_date[2] . '-' . $old_date[0] . '-' . $old_date[1];
 }
-if(isset($_POST['end']) && $_POST['end'] != ''){
-    $old_date = explode('/', $_POST['end']); 
-    $fecha_end = $old_date[2].'-'.$old_date[0].'-'.$old_date[1];
+if (isset($_POST['end']) && $_POST['end'] != '') {
+    $old_date = explode('/', $_POST['end']);
+    $fecha_end = $old_date[2] . '-' . $old_date[0] . '-' . $old_date[1];
 }
 
-if(isset($_POST['optionDashboard'])){
-   $optionDashboard = $_POST['optionDashboard'];
+if (isset($_POST['optionDashboard'])) {
+    $optionDashboard = $_POST['optionDashboard'];
 }
 
 
 $dataQuadro = '';
 $isAdmin = false;
 
-if($_SESSION['user_type'] == 'Administrador') {
+// Leads a traer
+
+
+
+$url_api = "https://cotizadorderco.com/clients/totales";
+$url_api2 = "https://cotizadorderco.com/clients/totalesGeneral";
+$curl = curl_init();
+
+$arrayLinks = array(
+    'https://derco.com.pe/catalogo-derco/',
+    'https://derco.com.pe/dercoutlet/',
+    'https://derco.com.pe/cybergo/',
+);
+
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $url_api2,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_SSL_VERIFYPEER => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => "{\n \"date1\": \"" . $fecha_inicio . "\",\n    \"date2\": \"" . $fecha_end . "\"\n}",
+    //CURLOPT_POSTFIELDS => $params,
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json"
+    ),
+));
+$response = curl_exec($curl);
+//Respuesta del endpoint
+$totales_response = json_decode($response);
+//Conversion a array
+$nuevo_array = arrayCastRecursive($totales_response);
+
+curl_close($curl);
+
+// ************************************************************
+
+if ($_SESSION['user_type'] == 'Administrador') {
     $isAdmin = true;
-    $url_api = "https://cotizadorderco.com/clients/totales";
-    $url_api2 = "https://cotizadorderco.com/clients/totalesGeneral";
-    $curl = curl_init();
 
-    $arrayLinks = array(
-        'https://derco.com.pe/catalogo-derco/',
-        'https://derco.com.pe/dercoutlet/',
-        'https://derco.com.pe/cybergo/',
-    );
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => $url_api2,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_SSL_VERIFYPEER => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS =>"{\n \"date1\": \"".$fecha_inicio."\",\n    \"date2\": \"".$fecha_end."\"\n}",
-        //CURLOPT_POSTFIELDS => $params,
-        CURLOPT_HTTPHEADER => array(
-            "Content-Type: application/json"
-        ),
-    ));
-    $response = curl_exec($curl);
-    //Respuesta del endpoint
-    $totales_response = json_decode($response);
-    //Conversion a array
-    $nuevo_array = arrayCastRecursive($totales_response);
-
-    if($optionDashboard == 'Por Campaña'){
+    if ($optionDashboard == 'Por Campaña') {
         //Division por Campaña (Link)
         $arrayCatalogoDerco = array();
         $arrayCyberGO = array();
         $arrayDercoOulet = array();
-        foreach($nuevo_array as $lead){
-            if($lead['url1_w2l'] != ''){
-                if($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/'){
+        foreach ($nuevo_array as $lead) {
+            if ($lead['url1_w2l'] != '') {
+                if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
                     array_push($arrayCatalogoDerco, $lead);
-                }else if($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/'){
+                } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/') {
                     array_push($arrayDercoOulet, $lead);
-                }else if($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/'){
+                } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                     array_push($arrayCyberGO, $lead);
                 }
             }
         }
 
         $arrayTablaFinal = array();
-        array_push($arrayTablaFinal,getData($nuevo_array, 'Total de Leads General'));
-        array_push($arrayTablaFinal,getData($arrayCatalogoDerco, 'Catálogo Derco'));
-        array_push($arrayTablaFinal,getData($arrayDercoOulet, 'DercoOulet'));
-        array_push($arrayTablaFinal,getData($arrayCyberGO, 'Cyber GO'));
-        
+        array_push($arrayTablaFinal, getData($nuevo_array, 'Total de Leads General'));
+        array_push($arrayTablaFinal, getData($arrayCatalogoDerco, 'Catálogo Derco'));
+        array_push($arrayTablaFinal, getData($arrayDercoOulet, 'DercoOulet'));
+        array_push($arrayTablaFinal, getData($arrayCyberGO, 'Cyber GO'));
+
         $contadorRows = 0;
-        foreach($arrayTablaFinal as $data){
+        foreach ($arrayTablaFinal as $data) {
             $catalogo_conversiones = 0;
-            if($data['total_leads'] != 0){
+            if ($data['total_leads'] != 0) {
                 $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
             }
             $dataQuadro .= '
             <tr>
-            <th scope="row">'.($contadorRows + 1).'</th>
-            <td>'.$data['titulo'].'</td>
-            <td>'.$data['total_leads'].'</td>
-            <td>'.number_format($catalogo_conversiones, 5, ',', '').'</td>
-            <td>'.$data['total_nuevos'].'</td>
-            <td>'.$data['total_contactado'].'</td>
-            <td>'.$data['total_cotizado'].'</td>
-            <td>'.$data['total_facturado'].'</td>
-            <td>'.$data['total_cancelado'].'</td>
-            <td>'.$data['total_gestionado'].'</td>
+            <th scope="row">' . ($contadorRows + 1) . '</th>
+            <td>' . $data['titulo'] . '</td>
+            <td>' . $data['total_leads'] . '</td>
+            <td>' . number_format($catalogo_conversiones, 5, ',', '') . '</td>
+            <td>' . $data['total_nuevos'] . '</td>
+            <td>' . $data['total_contactado'] . '</td>
+            <td>' . $data['total_cotizado'] . '</td>
+            <td>' . $data['total_facturado'] . '</td>
+            <td>' . $data['total_cancelado'] . '</td>
+            <td>' . $data['total_gestionado'] . '</td>
             </tr>
             ';
             $contadorRows++;
         }
-    }else{
-        /* 
-        $arrayTotalConcesionarios = [];
-        loop {
-            arrayvacio = []
-            si (existe el codigo en el concesionario){
-                arrayvacio['codigo de concesionario'][0] = 
-            }
-            arry_pusj(arrayTotalConcesionarios, arrayVacioo )
-        }
-        */
-        return
+    } else {
+        $count = 0;
+        $arrayConcesionarios = array();
 
+        foreach ($array_codigos as $store_code => $key) {
+            $arrayConcesionarios[$array_codigos[$store_code]['concesionario']] = array();
+        }
+
+        $arrayExcepciones = array();
+        
+        foreach ($nuevo_array as $lead) {
+            if ($lead['store'] !== '') {
+                $band = false;
+                foreach ($array_codigos as $store_code => $key) {
+                    if (in_array($lead['store'], array_column($array_codigos[$store_code]['tiendas'], 'code'))) {
+                        array_push($arrayConcesionarios[$array_codigos[$store_code]['concesionario']], $lead);
+                        $band = true;
+                    }
+                }
+                if (!$band){
+                    array_push($arrayExcepciones, $lead);
+                }
+            }
+        }
+
+        /* print_r($arrayExcepciones); */
+
+        $arrayTablaFinal = array();
+        array_push($arrayTablaFinal, getData($nuevo_array, 'Total de Leads General'));
+        foreach($arrayConcesionarios as $concesionarioLeads => $key){
+            array_push($arrayTablaFinal, getData($arrayConcesionarios[$concesionarioLeads], $concesionarioLeads));
+        }
+
+        $contadorRows = 0;
+        foreach ($arrayTablaFinal as $data) {
+            $catalogo_conversiones = 0;
+            if ($data['total_leads'] != 0) {
+                $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
+            }
+            $dataQuadro .= '
+            <tr>
+            <th scope="row">' . ($contadorRows + 1) . '</th>
+            <td>' . $data['titulo'] . '</td>
+            <td>' . $data['total_leads'] . '</td>
+            <td>' . number_format($catalogo_conversiones, 5, ',', '') . '</td>
+            <td>' . $data['total_nuevos'] . '</td>
+            <td>' . $data['total_contactado'] . '</td>
+            <td>' . $data['total_cotizado'] . '</td>
+            <td>' . $data['total_facturado'] . '</td>
+            <td>' . $data['total_cancelado'] . '</td>
+            <td>' . $data['total_gestionado'] . '</td>
+            </tr>
+            ';
+            $contadorRows++;
+        }
     }
-    
-    curl_close($curl);
-}else {
-    return;
+} else {
+    $arrayTiendas = array();
+    $arrayTiendas['Total de Leads General'] = array();
+
+    foreach ($array_codigos as $store_code => $key){
+        $arrayTiendas[$array_codigos[$store_code]['store_name']] = array();
+    }
+
+    foreach($nuevo_array as $lead){
+        if ($lead['store'] !== ''){
+            foreach($array_codigos as $store_code => $key){
+                if ($lead['store'] == $array_codigos[$store_code]['store_code']){
+                    array_push($arrayTiendas[$array_codigos[$store_code]['store_name']], $lead);
+                    array_push($arrayTiendas['Total de Leads General'], $lead);
+                }
+            }
+        }
+    }
+
+    $arrayTablaFinal = array();
+    foreach($arrayTiendas as $tiendaLead => $key){
+        array_push($arrayTablaFinal, getData($arrayTiendas[$tiendaLead], $tiendaLead));
+    }
+
+    $contadorRows = 0;
+        foreach ($arrayTablaFinal as $data) {
+            $catalogo_conversiones = 0;
+            if ($data['total_leads'] != 0) {
+                $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
+            }
+            $dataQuadro .= '
+            <tr>
+            <th scope="row">' . ($contadorRows + 1) . '</th>
+            <td>' . $data['titulo'] . '</td>
+            <td>' . $data['total_leads'] . '</td>
+            <td>' . number_format($catalogo_conversiones, 5, ',', '') . '</td>
+            <td>' . $data['total_nuevos'] . '</td>
+            <td>' . $data['total_contactado'] . '</td>
+            <td>' . $data['total_cotizado'] . '</td>
+            <td>' . $data['total_facturado'] . '</td>
+            <td>' . $data['total_cancelado'] . '</td>
+            <td>' . $data['total_gestionado'] . '</td>
+            </tr>
+            ';
+            $contadorRows++;
+        }
 }
 ?>
 
@@ -191,16 +285,17 @@ if($_SESSION['user_type'] == 'Administrador') {
 <div class="d-flex flex-column-fluid">
     <!--begin::Container-->
     <div class="container">
-        <!--begin::Dashboard-->
+        <!--begin::Dashboard--> 
 
-        <div class="col-sm-5 text-left mb-5"
-            style="<?php if($isAdmin) echo 'display:block'; else{echo 'display:none';} ?>">
+        <div class="col-sm-5 text-left mb-5">
             <form action="index.php?page=dashboard" method="POST">
-                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard"
-                    tabindex="-98">
+                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard" tabindex="-98" style="<?php if ($isAdmin) echo 'display:block';
+                                                    else {
+                                                        echo 'display:none';
+                                                    } ?>">
                     <option selected disabled>Seleccione una opción</option>
                     <option>Por Concesionarios</option>
-                    <option>Por Campañas</option>
+                    <option>Por Campaña</option>
                 </select>
                 <span>Rango de fechas:</span>
                 <div class="input-daterange input-group" id="kt_datepicker_5">
@@ -215,10 +310,13 @@ if($_SESSION['user_type'] == 'Administrador') {
                 <span class="form-text text-muted">Seleccione un rango de fechas</span>
                 <button type="submit" class="btn btn-primary">Filtrar</button>
                 <div class="mt-6">
-                    <h5>
+                    <h5 style="<?php if ($isAdmin) echo 'display:block';
+                                                    else {
+                                                        echo 'display:none';
+                                                    } ?>">
                         Opción: <?= $optionDashboard; ?>
                     </h5>
-                    <h5>
+                    <h5 >
                         Fecha Inicio: <?= $fecha_inicio; ?>
                     </h5>
                     <h5>

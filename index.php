@@ -181,6 +181,7 @@ if ($user_type == 'Administrador') {
 			var consesionariosAdministrador =  '';
 			if(isAdministrador == 'Administrador'){
 				consesionariosAdministrador = JSON.parse('<?= json_encode($array_codigos) ?>');
+				console.log('Los codigos de concesionarios son',consesionariosAdministrador)
 			}
 
 			var initDate = $('#initDate').val();
@@ -469,6 +470,7 @@ if ($user_type == 'Administrador') {
 						}
 					});
 					}else{
+						console.log(codeConcesionario);
 						arrayCodes.push(codeConcesionario);
 					}
 

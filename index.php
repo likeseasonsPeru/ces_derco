@@ -20,7 +20,6 @@ $user_type = $_SESSION["user_type"];
 $nombre = $_SESSION["user_name"];
 $correo = $_SESSION["user_email"];
 $array_codigos = $_SESSION["user_stores"];
-print_r($array_codigos);
 if ($user_type == 'Administrador') {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
@@ -543,6 +542,10 @@ if ($user_type == 'Administrador') {
 						sortable: true,
 
 						pagination: true,
+
+						search: {
+							input: $('#generalSearch'),
+						},
 
 						translate: {
 							records: {
@@ -1343,6 +1346,7 @@ if ($user_type == 'Administrador') {
 
 			function updateStoreId(store_id) {
 				global_current_store_code = store_id;
+				
 				KTDatatableRemoteAjaxLeads.reloadData();
 			}
 

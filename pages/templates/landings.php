@@ -125,6 +125,11 @@ if($tipo_usuario == "Administrador"){
 						<label for="codeConcesionario">Fecha Final: </label>
 						<input style="min-width: 250px;" id="fechaFinal" type="text" disabled="true">
 					</div>
+
+					<div class="col-12 mt-4">
+						<label for="codeConcesionario">DNI o nombre:</label>
+						<input style="min-width: 250px;" id="generalSearch" type="text">
+					</div>
 				</div>
 				<div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
 				<!--end: Datatable-->

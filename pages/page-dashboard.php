@@ -70,7 +70,7 @@ function getData($array, $titulo)
 }
 $fecha_inicio = date('Y-m-d');
 $fecha_end = date('Y-m-d');
-$optionDashboard = 'Por Campaña';
+$optionDashboard = 'Por Campaña y Websites';
 if (isset($_POST['start']) && $_POST['start'] != '') {
     $old_date = explode('/', $_POST['start']);
     $fecha_inicio = $old_date[2] . '-' . $old_date[0] . '-' . $old_date[1];
@@ -131,28 +131,64 @@ curl_close($curl);
 if ($_SESSION['user_type'] == 'Administrador') {
     $isAdmin = true;
 
-    if ($optionDashboard == 'Por Campaña') {
+    if ($optionDashboard == 'Por Campaña y Websites') {
         //Division por Campaña (Link)
         $arrayCatalogoDerco = array();
         $arrayCyberGO = array();
         $arrayDercoOulet = array();
+        $arraySuzuki = array();
+        $arrayMazda = array();
+        $arrayRenault = array();
+        $arrayChangan = array();
+        $arrayHaval = array();
+        $arrayJac = array();
+        $arrayCitroen = array();
+        $arrayGreatWall = array();
+        $arrayExceptions = array();
         foreach ($nuevo_array as $lead) {
             if ($lead['url1_w2l'] != '') {
                 if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
                     array_push($arrayCatalogoDerco, $lead);
-                } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/') {
+                } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                     array_push($arrayDercoOulet, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                     array_push($arrayCyberGO, $lead);
+                } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
+                    array_push($arraySuzuki, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
+                    array_push($arrayMazda, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
+                    array_push($arrayRenault, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
+                    array_push($arrayChangan, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
+                    array_push($arrayHaval, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
+                    array_push($arrayJac, $lead);
+                } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
+                    array_push($arrayCitroen, $lead);
+                } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
+                    array_push($arrayGreatWall, $lead);
+                } else {
+                    array_push($arrayExceptions, $lead);
                 }
             }
         }
 
+        /* print_r($arrayExceptions); */
         $arrayTablaFinal = array();
         array_push($arrayTablaFinal, getData($nuevo_array, 'Total de Leads General'));
         array_push($arrayTablaFinal, getData($arrayCatalogoDerco, 'Catálogo Derco'));
         array_push($arrayTablaFinal, getData($arrayDercoOulet, 'DercoOulet'));
         array_push($arrayTablaFinal, getData($arrayCyberGO, 'Cyber GO'));
+        if (count($arraySuzuki) > 0) array_push($arrayTablaFinal, getData($arraySuzuki, 'Suzuki'));
+        if (count($arrayMazda) > 0) array_push($arrayTablaFinal, getData($arrayMazda, 'Mazda'));
+        if (count($arrayRenault) > 0) array_push($arrayTablaFinal, getData($arrayRenault, 'Renault'));
+        if (count($arrayChangan) > 0) array_push($arrayTablaFinal, getData($arrayChangan, 'Changan'));
+        if (count($arrayHaval) > 0) array_push($arrayTablaFinal, getData($arrayHaval, 'Haval'));
+        if (count($arrayJac) > 0) array_push($arrayTablaFinal, getData($arrayJac, 'Jac'));
+        if (count($arrayCitroen) > 0) array_push($arrayTablaFinal, getData($arrayCitroen, 'Citroën'));
+        if (count($arrayGreatWall) > 0) array_push($arrayTablaFinal, getData($arrayGreatWall, 'Great Wall'));
 
         $contadorRows = 0;
         foreach ($arrayTablaFinal as $data) {
@@ -185,7 +221,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
         }
 
         $arrayExcepciones = array();
-        
+
         foreach ($nuevo_array as $lead) {
             if ($lead['store'] !== '') {
                 $band = false;
@@ -195,7 +231,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
                         $band = true;
                     }
                 }
-                if (!$band){
+                if (!$band) {
                     array_push($arrayExcepciones, $lead);
                 }
             }
@@ -205,7 +241,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
 
         $arrayTablaFinal = array();
         array_push($arrayTablaFinal, getData($nuevo_array, 'Total de Leads General'));
-        foreach($arrayConcesionarios as $concesionarioLeads => $key){
+        foreach ($arrayConcesionarios as $concesionarioLeads => $key) {
             array_push($arrayTablaFinal, getData($arrayConcesionarios[$concesionarioLeads], $concesionarioLeads));
         }
 
@@ -233,30 +269,73 @@ if ($_SESSION['user_type'] == 'Administrador') {
         }
     }
 } else {
-    $arrayTiendas = array();
-    $arrayTiendas['Total de Leads General'] = array();
 
-    foreach ($array_codigos as $store_code => $key){
-        $arrayTiendas[$array_codigos[$store_code]['store_name']] = array();
-    }
-
-    foreach($nuevo_array as $lead){
-        if ($lead['store'] !== ''){
-            foreach($array_codigos as $store_code => $key){
-                if ($lead['store'] == $array_codigos[$store_code]['store_code']){
-                    array_push($arrayTiendas[$array_codigos[$store_code]['store_name']], $lead);
-                    array_push($arrayTiendas['Total de Leads General'], $lead);
+    if ($optionDashboard == 'Por Campaña y Websites') {
+        //Division por Campaña (Link)
+        $arrayTotales = array();
+        $arrayCatalogoDerco = array();
+        $arrayCyberGO = array();
+        $arrayDercoOulet = array();
+        $arraySuzuki = array();
+        $arrayMazda = array();
+        $arrayRenault = array();
+        $arrayChangan = array();
+        $arrayHaval = array();
+        $arrayJac = array();
+        $arrayCitroen = array();
+        $arrayGreatWall = array();
+        $arrayExceptions = array();
+        foreach ($nuevo_array as $lead) {
+            if ($lead['url1_w2l'] != '' && $lead['store'] != '') {
+                foreach ($array_codigos as $store_code => $key) {
+                    if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
+                        if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
+                            array_push($arrayCatalogoDerco, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
+                            array_push($arrayDercoOulet, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
+                            array_push($arrayCyberGO, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
+                            array_push($arraySuzuki, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
+                            array_push($arrayMazda, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
+                            array_push($arrayRenault, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
+                            array_push($arrayChangan, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
+                            array_push($arrayHaval, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
+                            array_push($arrayJac, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
+                            array_push($arrayCitroen, $lead);
+                        } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
+                            array_push($arrayGreatWall, $lead);
+                        } else {
+                            array_push($arrayExceptions, $lead);
+                        }
+                        array_push($arrayTotales, $lead);
+                    }
                 }
             }
         }
-    }
+        print_r($arrayTotales);
+        /* print_r($arrayExceptions); */
+        $arrayTablaFinal = array();
+        array_push($arrayTablaFinal, getData($arrayTotales, 'Total de Leads General'));
+        array_push($arrayTablaFinal, getData($arrayCatalogoDerco, 'Catálogo Derco'));
+        array_push($arrayTablaFinal, getData($arrayDercoOulet, 'DercoOulet'));
+        array_push($arrayTablaFinal, getData($arrayCyberGO, 'Cyber GO'));
+        if (count($arraySuzuki) > 0) array_push($arrayTablaFinal, getData($arraySuzuki, 'Suzuki'));
+        if (count($arrayMazda) > 0) array_push($arrayTablaFinal, getData($arrayMazda, 'Mazda'));
+        if (count($arrayRenault) > 0) array_push($arrayTablaFinal, getData($arrayRenault, 'Renault'));
+        if (count($arrayChangan) > 0) array_push($arrayTablaFinal, getData($arrayChangan, 'Changan'));
+        if (count($arrayHaval) > 0) array_push($arrayTablaFinal, getData($arrayHaval, 'Haval'));
+        if (count($arrayJac) > 0) array_push($arrayTablaFinal, getData($arrayJac, 'Jac'));
+        if (count($arrayCitroen) > 0) array_push($arrayTablaFinal, getData($arrayCitroen, 'Citroën'));
+        if (count($arrayGreatWall) > 0) array_push($arrayTablaFinal, getData($arrayGreatWall, 'Great Wall'));
 
-    $arrayTablaFinal = array();
-    foreach($arrayTiendas as $tiendaLead => $key){
-        array_push($arrayTablaFinal, getData($arrayTiendas[$tiendaLead], $tiendaLead));
-    }
-
-    $contadorRows = 0;
+        $contadorRows = 0;
         foreach ($arrayTablaFinal as $data) {
             $catalogo_conversiones = 0;
             if ($data['total_leads'] != 0) {
@@ -278,6 +357,53 @@ if ($_SESSION['user_type'] == 'Administrador') {
             ';
             $contadorRows++;
         }
+    } else {
+        $arrayTiendas = array();
+        $arrayTiendas['Total de Leads General'] = array();
+
+        foreach ($array_codigos as $store_code => $key) {
+            $arrayTiendas[$array_codigos[$store_code]['store_name']] = array();
+        }
+
+        foreach ($nuevo_array as $lead) {
+            if ($lead['store'] !== '') {
+                foreach ($array_codigos as $store_code => $key) {
+                    if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
+                        array_push($arrayTiendas[$array_codigos[$store_code]['store_name']], $lead);
+                        array_push($arrayTiendas['Total de Leads General'], $lead);
+                    }
+                }
+            }
+        }
+
+        $arrayTablaFinal = array();
+        foreach ($arrayTiendas as $tiendaLead => $key) {
+            array_push($arrayTablaFinal, getData($arrayTiendas[$tiendaLead], $tiendaLead));
+        }
+
+        $contadorRows = 0;
+        foreach ($arrayTablaFinal as $data) {
+            $catalogo_conversiones = 0;
+            if ($data['total_leads'] != 0) {
+                $catalogo_conversiones = $data['total_facturado'] / $data['total_leads'];
+            }
+            $dataQuadro .= '
+            <tr>
+            <th scope="row">' . ($contadorRows + 1) . '</th>
+            <td>' . $data['titulo'] . '</td>
+            <td>' . $data['total_leads'] . '</td>
+            <td>' . number_format($catalogo_conversiones, 5, ',', '') . '</td>
+            <td>' . $data['total_nuevos'] . '</td>
+            <td>' . $data['total_contactado'] . '</td>
+            <td>' . $data['total_cotizado'] . '</td>
+            <td>' . $data['total_facturado'] . '</td>
+            <td>' . $data['total_cancelado'] . '</td>
+            <td>' . $data['total_gestionado'] . '</td>
+            </tr>
+            ';
+            $contadorRows++;
+        }
+    }
 }
 ?>
 
@@ -285,17 +411,17 @@ if ($_SESSION['user_type'] == 'Administrador') {
 <div class="d-flex flex-column-fluid">
     <!--begin::Container-->
     <div class="container">
-        <!--begin::Dashboard--> 
+        <!--begin::Dashboard-->
 
         <div class="col-sm-5 text-left mb-5">
             <form action="index.php?page=dashboard" method="POST">
-                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard" tabindex="-98" style="<?php if ($isAdmin) echo 'display:block';
-                                                    else {
-                                                        echo 'display:none';
-                                                    } ?>">
+                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard" tabindex="-98">
                     <option selected disabled>Seleccione una opción</option>
-                    <option>Por Concesionarios</option>
-                    <option>Por Campaña</option>
+                    <option><?php if ($isAdmin) echo 'Por Concesionarios';
+                            else {
+                                echo 'Por Tienda';
+                            } ?></option>
+                    <option>Por Campaña y Websites</option>
                 </select>
                 <span>Rango de fechas:</span>
                 <div class="input-daterange input-group" id="kt_datepicker_5">
@@ -311,12 +437,12 @@ if ($_SESSION['user_type'] == 'Administrador') {
                 <button type="submit" class="btn btn-primary">Filtrar</button>
                 <div class="mt-6">
                     <h5 style="<?php if ($isAdmin) echo 'display:block';
-                                                    else {
-                                                        echo 'display:none';
-                                                    } ?>">
+                                else {
+                                    echo 'display:none';
+                                } ?>">
                         Opción: <?= $optionDashboard; ?>
                     </h5>
-                    <h5 >
+                    <h5>
                         Fecha Inicio: <?= $fecha_inicio; ?>
                     </h5>
                     <h5>

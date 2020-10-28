@@ -1,8 +1,8 @@
 <?php
 session_start();
-if($_SESSION["id"] == '') {
-    header('Location:login.php');
-    exit;
+if ($_SESSION["id"] == '') {
+	header('Location:login.php');
+	exit;
 }
 
 error_reporting(E_ALL);
@@ -29,7 +29,7 @@ if ($user_type == 'Administrador') {
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
 
 	$arrayStoresCES = [];
-	foreach($array_codigos as $tienda){
+	foreach ($array_codigos as $tienda) {
 		array_push($arrayStoresCES, $tienda['store_code']);
 	}
 	$current_store_code = json_encode($arrayStoresCES);
@@ -42,346 +42,373 @@ if ($user_type == 'Administrador') {
 <!DOCTYPE html>
 <html lang="en">
 
-	<!--begin::Head-->
-	<head>
-		<base href="">
-		<meta charset="utf-8" />
-		<title>CRM | DERCO PERÚ</title>
-		<meta name="description" content="CRM - DERCO PERÚ es un Dashboard dónde podrán gestionar los leads generados a través de los landings de DERCO PERÚ." />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-		<link rel="canonical" href="https://derco.com.pe/plataforma/crm" />
+<!--begin::Head-->
 
-		<!--begin::Fonts-->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+<head>
+	<base href="">
+	<meta charset="utf-8" />
+	<title>CRM | DERCO PERÚ</title>
+	<meta name="description" content="CRM - DERCO PERÚ es un Dashboard dónde podrán gestionar los leads generados a través de los landings de DERCO PERÚ." />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<link rel="canonical" href="https://derco.com.pe/plataforma/crm" />
 
-		<!--end::Fonts-->
+	<!--begin::Fonts-->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
-		<!--begin::Page Vendors Styles(used by this page)-->
-		<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-		
-		<!--end::Page Vendors Styles-->
+	<!--end::Fonts-->
 
-		<!--begin::Global Theme Styles(used by all pages)-->
-		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+	<!--begin::Page Vendors Styles(used by this page)-->
+	<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 
-		<!--end::Global Theme Styles-->
+	<!--end::Page Vendors Styles-->
 
-		<!--begin::Layout Themes(used by all pages)-->
-		<link href="assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
+	<!--begin::Global Theme Styles(used by all pages)-->
+	<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 
-		<!--end::Layout Themes-->
-		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-	</head>
+	<!--end::Global Theme Styles-->
 
-	<!--end::Head-->
+	<!--begin::Layout Themes(used by all pages)-->
+	<link href="assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
 
-	<!--begin::Body-->
-	<body id="kt_body" class="page-loading-enabled page-loading header-fixed header-mobile-fixed subheader-enabled aside-enabled aside-fixed page-loading">
+	<!--end::Layout Themes-->
+	<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+</head>
 
-		<?php include("partials/_page-loader.php"); ?>
+<!--end::Head-->
 
-		<?php include("layout.php"); ?>
+<!--begin::Body-->
 
-		<?php include("partials/_extras/offcanvas/quick-user.php"); ?>
+<body id="kt_body" class="page-loading-enabled page-loading header-fixed header-mobile-fixed subheader-enabled aside-enabled aside-fixed page-loading">
 
-		<?php include("partials/_extras/scrolltop.php"); ?>
+	<?php include("partials/_page-loader.php"); ?>
 
-		<!--begin::Global Config(global config for global JS scripts)-->
-		<script>
-			var KTAppSettings = {
-				"breakpoints": {
-					"sm": 576,
-					"md": 768,
-					"lg": 992,
-					"xl": 1200,
-					"xxl": 1400
-				},
-				"colors": {
-					"theme": {
-						"base": {
-							"white": "#ffffff",
-							"primary": "#3699FF",
-							"secondary": "#E5EAEE",
-							"success": "#1BC5BD",
-							"info": "#8950FC",
-							"warning": "#FFA800",
-							"danger": "#F64E60",
-							"light": "#E4E6EF",
-							"dark": "#181C32"
-						},
-						"light": {
-							"white": "#ffffff",
-							"primary": "#E1F0FF",
-							"secondary": "#EBEDF3",
-							"success": "#C9F7F5",
-							"info": "#EEE5FF",
-							"warning": "#FFF4DE",
-							"danger": "#FFE2E5",
-							"light": "#F3F6F9",
-							"dark": "#D6D6E0"
-						},
-						"inverse": {
-							"white": "#ffffff",
-							"primary": "#ffffff",
-							"secondary": "#3F4254",
-							"success": "#ffffff",
-							"info": "#ffffff",
-							"warning": "#ffffff",
-							"danger": "#ffffff",
-							"light": "#464E5F",
-							"dark": "#ffffff"
-						}
+	<?php include("layout.php"); ?>
+
+	<?php include("partials/_extras/offcanvas/quick-user.php"); ?>
+
+	<?php include("partials/_extras/scrolltop.php"); ?>
+
+	<!--begin::Global Config(global config for global JS scripts)-->
+	<script>
+		var KTAppSettings = {
+			"breakpoints": {
+				"sm": 576,
+				"md": 768,
+				"lg": 992,
+				"xl": 1200,
+				"xxl": 1400
+			},
+			"colors": {
+				"theme": {
+					"base": {
+						"white": "#ffffff",
+						"primary": "#3699FF",
+						"secondary": "#E5EAEE",
+						"success": "#1BC5BD",
+						"info": "#8950FC",
+						"warning": "#FFA800",
+						"danger": "#F64E60",
+						"light": "#E4E6EF",
+						"dark": "#181C32"
 					},
-					"gray": {
-						"gray-100": "#F3F6F9",
-						"gray-200": "#EBEDF3",
-						"gray-300": "#E4E6EF",
-						"gray-400": "#D1D3E0",
-						"gray-500": "#B5B5C3",
-						"gray-600": "#7E8299",
-						"gray-700": "#5E6278",
-						"gray-800": "#3F4254",
-						"gray-900": "#181C32"
+					"light": {
+						"white": "#ffffff",
+						"primary": "#E1F0FF",
+						"secondary": "#EBEDF3",
+						"success": "#C9F7F5",
+						"info": "#EEE5FF",
+						"warning": "#FFF4DE",
+						"danger": "#FFE2E5",
+						"light": "#F3F6F9",
+						"dark": "#D6D6E0"
+					},
+					"inverse": {
+						"white": "#ffffff",
+						"primary": "#ffffff",
+						"secondary": "#3F4254",
+						"success": "#ffffff",
+						"info": "#ffffff",
+						"warning": "#ffffff",
+						"danger": "#ffffff",
+						"light": "#464E5F",
+						"dark": "#ffffff"
 					}
 				},
-				"font-family": "Poppins"
-			};
-		</script>
-		<!--end::Global Config-->
+				"gray": {
+					"gray-100": "#F3F6F9",
+					"gray-200": "#EBEDF3",
+					"gray-300": "#E4E6EF",
+					"gray-400": "#D1D3E0",
+					"gray-500": "#B5B5C3",
+					"gray-600": "#7E8299",
+					"gray-700": "#5E6278",
+					"gray-800": "#3F4254",
+					"gray-900": "#181C32"
+				}
+			},
+			"font-family": "Poppins"
+		};
+	</script>
+	<!--end::Global Config-->
 
-		<!--begin::Global Theme Bundle(used by all pages)-->
-		<script src="assets/plugins/global/plugins.bundle.js"></script>
-		<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
-		<script src="assets/js/scripts.bundle.js"></script>
+	<!--begin::Global Theme Bundle(used by all pages)-->
+	<script src="assets/plugins/global/plugins.bundle.js"></script>
+	<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+	<script src="assets/js/scripts.bundle.js"></script>
 
-		<!--end::Global Theme Bundle-->
+	<!--end::Global Theme Bundle-->
 
-		<!--begin::Page Vendors(used by this page)-->
-		<script src="assets/js/pages/widgets.js"></script>
-		<script type="text/javascript" src="assets/js/pages/custom/xlsx/xlsx.full.min.js"></script>
-		<!--end::Page Vendors-->
+	<!--begin::Page Vendors(used by this page)-->
+	<script src="assets/js/pages/widgets.js"></script>
+	<script type="text/javascript" src="assets/js/pages/custom/xlsx/xlsx.full.min.js"></script>
+	<!--end::Page Vendors-->
 
-		<!--begin::Page Scripts(used by this page)-->
-		<script>
-			//Global Variables
-			var global_current_store_code = '<?php echo $current_store_code; ?>';
-			if(global_current_store_code != ''){
-				global_current_store_code = JSON.parse(global_current_store_code);
-                //console.log("global_current_store_code", global_current_store_code)
-			}
-			var isAdministrador = '<?= $user_type; ?>';
-			//Condicionar para administrador
-			var consesionariosData = JSON.parse('<?= json_encode($array_codigos) ?>');
-			
+	<!--begin::Page Scripts(used by this page)-->
+	<script>
+		//Global Variables
+		var global_current_store_code = '<?php echo $current_store_code; ?>';
+		if (global_current_store_code != '') {
+			global_current_store_code = JSON.parse(global_current_store_code);
+			//console.log("global_current_store_code", global_current_store_code)
+		}
+		var isAdministrador = '<?= $user_type; ?>';
+		//Condicionar para administrador
+		var consesionariosData = JSON.parse('<?= json_encode($array_codigos) ?>');
 
-			var initDate = $('#initDate').val();
-			var endDate = $('#endDate').val();
-			var dataTableRaw = '';
-			if (initDate == '' && endDate == '') {
-				initDate = '<?php echo $initDate; ?>';
-				endDate = '<?php echo $endDate; ?>';
-			}
 
-			var initDateAmicar = $('#initDateAmicar').val();
-			var endDateAmicar = $('#endDateAmicar').val();
-			if (initDateAmicar == '' && endDateAmicar == '') {
-				initDateAmicar = '<?php echo $initDate; ?>';
-				endDateAmicar = '<?php echo $endDate; ?>';
-			}
+		var initDate = $('#initDate').val();
+		var endDate = $('#endDate').val();
+		var dataTableRaw = '';
+		if (initDate == '' && endDate == '') {
+			initDate = '<?php echo $initDate; ?>';
+			endDate = '<?php echo $endDate; ?>';
+		}
 
-			// Class definition
-			var KTDatatableRemoteAjaxLeads = function() {
-				// Private functions
-				var initTableLanding = function() {
-					
-					var code = global_current_store_code; //Variable Global
-					$('#codeConcesionario').val('Todas');
-					
-					var current_landing = '<?php echo $current_landing; ?>';
-					var id_cotizador = '';
+		var initDateAmicar = $('#initDateAmicar').val();
+		var endDateAmicar = $('#endDateAmicar').val();
+		if (initDateAmicar == '' && endDateAmicar == '') {
+			initDateAmicar = '<?php echo $initDate; ?>';
+			endDateAmicar = '<?php echo $endDate; ?>';
+		}
 
-					var startRange = $('#initDate').val();
-					var endRangeDate = $('#endDate').val();
+		// Class definition
+		var KTDatatableRemoteAjaxLeads = function() {
+			// Private functions
+			var initTableLanding = function() {
+				var global_current_store_code = '<?php echo $current_store_code; ?>';
+				if (global_current_store_code != '') {
+					global_current_store_code = JSON.parse(global_current_store_code);
+					//console.log("global_current_store_code", global_current_store_code)
+				}
+				var code = global_current_store_code; //Variable Global
+				$('#codeConcesionario').val('Todas');
 
-					console.log(startRange, endRangeDate);
+				var current_landing = '<?php echo $current_landing; ?>';
+				var current_landing2 = '<?php if(isset($current_landing2)) echo $current_landing2; else echo null;?>';
+				var id_cotizador = '';
 
-					if (startRange == '' && endRangeDate == '') {
-						startRange = '<?php echo $initDate; ?>';
-						endRangeDate = '<?php echo $endDate; ?>';
-						$('#fechaInicial').val(startRange);
-						$('#fechaFinal').val(endRangeDate);
+				var startRange = $('#initDate').val();
+				var endRangeDate = $('#endDate').val();
+
+				console.log(startRange, endRangeDate);
+
+				if (startRange == '' && endRangeDate == '') {
+					startRange = '<?php echo $initDate; ?>';
+					endRangeDate = '<?php echo $endDate; ?>';
+					$('#fechaInicial').val(startRange);
+					$('#fechaFinal').val(endRangeDate);
+				}
+
+				//console.log(current_landing);
+
+				$('#kt_datatable').KTDatatable('destroy');
+				$('#kt_datatable').KTDatatable('reload');
+
+				var params = {
+					date1: startRange,
+					date2: endRangeDate
+				};
+				if (current_landing && current_landing !== '') {
+					var arrayurl1_w2l = [];
+					arrayurl1_w2l.push(current_landing);
+					if (current_landing2){
+						arrayurl1_w2l.push(current_landing2);
 					}
+					params = {
+						...params,
+						url1_w2l: arrayurl1_w2l
+					}
+				}
 
-					//console.log(current_landing);
+				if (code && code !== '') {
+					params = {
+						...params,
+						store: code
+					}
+				}
 
-					$('#kt_datatable').KTDatatable('destroy');
-					$('#kt_datatable').KTDatatable('reload');
-					var datatable = $('#kt_datatable').KTDatatable({
-						
-						// datasource definition
-						data: {
-							type: 'remote',
-							source: {
-								read: {
-									url: '<?php echo $api_tiendas; ?>',
-									headers: {
-										'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo', 
-										'Accept': 'application/json',
-									},
-									//contentType: 'application/json',
-									params: {
-										url1_w2l: current_landing,
-										store: code,
-										date1: startRange,
-										date2: endRangeDate
-									},
-									map: function(raw) {
-										// sample data mapping
-										var dataSet = raw;
-										if (typeof raw.data !== 'undefined') {
-											dataSet = raw.data;
-											dataTableRaw = dataSet;
-										}
-										return dataSet;
-									},
+
+				var datatable = $('#kt_datatable').KTDatatable({
+
+					// datasource definition
+					data: {
+						type: 'remote',
+						source: {
+							read: {
+								url: '<?php echo $api_tiendas; ?>',
+								headers: {
+									'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo',
+									'Accept': 'application/json',
+								},
+								//contentType: 'application/json',
+								params: params,
+								map: function(raw) {
+									// sample data mapping
+									var dataSet = raw;
+									if (typeof raw.data !== 'undefined') {
+										dataSet = raw.data;
+										dataTableRaw = dataSet;
+									}
+									return dataSet;
 								},
 							},
-							pageSize: 50,
-							serverPaging: false,
-							serverFiltering: false,
-							serverSorting: false,
+						},
+						pageSize: 50,
+						serverPaging: false,
+						serverFiltering: false,
+						serverSorting: false,
+					},
+
+					// layout definition
+					layout: {
+						scroll: false,
+						footer: false,
+					},
+
+					// column sorting
+					sortable: true,
+
+					pagination: true,
+
+					translate: {
+						records: {
+							processing: 'Cargando leads...',
+							noRecords: 'No se encontraron leads.',
 						},
 
-						// layout definition
-						layout: {
-							scroll: false,
-							footer: false,
-						},
+						toolbar: {
+							pagination: {
+								items: {
+									default: {
+										first: 'Inicio',
+										prev: 'Anterior',
+										next: 'Siguiente',
+										last: 'Fin',
+										more: 'Más páginas',
+										input: 'Número de página',
+										select: 'Máximo por página',
+									},
 
-						// column sorting
-						sortable: true,
-
-						pagination: true,
-
-						translate: {
-							records: {
-								processing: 'Cargando leads...',
-								noRecords: 'No se encontraron leads.',
-							},
-
-							toolbar: {
-								pagination: {
-									items: {
-										default: {
-											first: 'Inicio',
-											prev: 'Anterior',
-											next: 'Siguiente',
-											last: 'Fin',
-											more: 'Más páginas',
-											input: 'Número de página',
-											select: 'Máximo por página',
-										},
-
-										info: '{{start}} - {{end}} de {{total}} leads',
-									}
+									info: '{{start}} - {{end}} de {{total}} leads',
 								}
-							},
-						},
-
-						// columns definition
-						columns: [{
-							field: 'id',
-							title: '#',
-							sortable: 'asc',
-							width: 30,
-							type: 'number',
-							selector: false,
-							textAlign: 'center',
-						}, {
-							field: 'marca2',
-							title: 'Marca',
-						}, {
-							field: 'model_w2l',
-							title: 'Modelo',
-						}, {
-							field: 'version_w2l',
-							title: 'Versión',
-						}, {
-							field: 'rut_w2l',
-							title: 'Número de Documento',
-						},{
-							field: 'first_name',
-							title: 'Nombres',
-						}, {
-							field: 'last_name',
-							title: 'Apellidos',
-						}, {
-							field: 'fone1_w2l',
-							title: 'Celular',
-						}, {
-							field: 'created_at',
-							title: 'Creado',
-							autoHide: false,
-							type: 'date',
-							//format: 'DD/MM/YYYY HH:mm:ss',
-						}, {
-							field: 'estado',
-							title: 'Status',
-							overflow: 'visible',
-							autoHide: false,
-							// callback function support for column rendering
-							template: function(row) {
-								var status = {
-									'Nuevo': {
-										'title': 'Nuevo',
-										'class': ' label-light-success'
-									},
-									'Contactado': {
-										'title': 'Contactado',
-										'class': ' label-light-danger'
-									},
-									'Cotizado': {
-										'title': 'Cotizado',
-										'class': ' label-light-primary'
-									},
-									'Facturado': {
-										'title': 'Facturado',
-										'class': ' label-light-success'
-									},
-									'Cancelado': {
-										'title': 'Cancelado',
-										'class': ' label-light-info'
-									},
-									'Gestionado': {
-										'title': 'Gestionado',
-										'class': ' label-light-dark'
-									},
-								};
-								return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
-							},
-						}, {
-							field: '_id',
-							title: 'ID Cotizador',
-							visible: false,
-							template: function (row) {
-								id_cotizador = row._id;
-								return id_cotizador; 
 							}
-						}, {
-							field: 'Actions',
-							title: 'Acciones',
-							sortable: false,
-							//width: 80,
-							overflow: 'visible',
-							autoHide: false,
-							template: function() {
-								return '\
+						},
+					},
+
+					// columns definition
+					columns: [{
+						field: 'id',
+						title: '#',
+						sortable: 'asc',
+						width: 30,
+						type: 'number',
+						selector: false,
+						textAlign: 'center',
+					}, {
+						field: 'marca2',
+						title: 'Marca',
+					}, {
+						field: 'model_w2l',
+						title: 'Modelo',
+					}, {
+						field: 'version_w2l',
+						title: 'Versión',
+					}, {
+						field: 'rut_w2l',
+						title: 'Número de Documento',
+					}, {
+						field: 'first_name',
+						title: 'Nombres',
+					}, {
+						field: 'last_name',
+						title: 'Apellidos',
+					}, {
+						field: 'fone1_w2l',
+						title: 'Celular',
+					}, {
+						field: 'created_at',
+						title: 'Creado',
+						autoHide: false,
+						type: 'date',
+						//format: 'DD/MM/YYYY HH:mm:ss',
+					}, {
+						field: 'estado',
+						title: 'Status',
+						overflow: 'visible',
+						autoHide: false,
+						// callback function support for column rendering
+						template: function(row) {
+							var status = {
+								'Nuevo': {
+									'title': 'Nuevo',
+									'class': ' label-light-success'
+								},
+								'Contactado': {
+									'title': 'Contactado',
+									'class': ' label-light-danger'
+								},
+								'Cotizado': {
+									'title': 'Cotizado',
+									'class': ' label-light-primary'
+								},
+								'Facturado': {
+									'title': 'Facturado',
+									'class': ' label-light-success'
+								},
+								'Cancelado': {
+									'title': 'Cancelado',
+									'class': ' label-light-info'
+								},
+								'Gestionado': {
+									'title': 'Gestionado',
+									'class': ' label-light-dark'
+								},
+							};
+							return '<span id="label-' + status[row.estado].title + '"class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+						},
+					}, {
+						field: '_id',
+						title: 'ID Cotizador',
+						visible: false,
+						template: function(row) {
+							id_cotizador = row._id;
+							return id_cotizador;
+						}
+					}, {
+						field: 'Actions',
+						title: 'Acciones',
+						sortable: false,
+						//width: 80,
+						overflow: 'visible',
+						autoHide: false,
+						template: function() {
+							return '\
 									<div class="dropdown dropdown-inline">\
 										<a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
 											<svg xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
@@ -398,37 +425,37 @@ if ($user_type == 'Administrador') {
 													Cambiar estado:\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
 														<span class="navi-text">Nuevo</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
 														<span class="navi-text">Contactado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
 														<span class="navi-text">Cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Facturado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Facturado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-handshake"></i></span>\
 														<span class="navi-text">Facturado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
 														<span class="navi-text">Cancelado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
 														<span class="navi-text">Gestionado</span>\
 													</a>\
@@ -437,229 +464,252 @@ if ($user_type == 'Administrador') {
 										</div>\
 									</div>\
 								';
-							},
-						}],
-					});
+						},
+					}],
+				});
 
 
-					return {
-						datatable: function() {
-							return datatable;
-						}
-					};
+				return {
+					datatable: function() {
+						return datatable;
+					}
 				};
-				// basic demo
-				var getLeads = function() {
-					
-					var codeConcesionario = global_current_store_code; //Variable Global
-					
-                    console.log("getLeads -> isAdministrador", isAdministrador)
-					//Condicionar para administrador
-					var arrayCodes = [];
-					if(isAdministrador == 'Administrador'){
-						consesionariosData.map(concesionario => {
-						if(concesionario.id_concesionario == codeConcesionario){
+			};
+			// basic demo
+			var getLeads = function() {
+
+				var codeConcesionario = global_current_store_code; //Variable Global
+
+				console.log("getLeads -> isAdministrador", isAdministrador)
+				//Condicionar para administrador
+				var arrayCodes = [];
+				if (isAdministrador == 'Administrador') {
+					consesionariosData.map(concesionario => {
+						if (concesionario.id_concesionario == codeConcesionario) {
 							concesionario.tiendas.map(tienda => {
 								arrayCodes.push(tienda.code);
 							})
 							$('#codeConcesionario').val(concesionario.concesionario);
 						}
 					});
-					}else{
-						consesionariosData.map(concesionario => {
-							if (concesionario.store_code == codeConcesionario){
-								$('#codeConcesionario').val(concesionario.store_name);
-							}
-						})
-						arrayCodes.push(codeConcesionario);
-					}
+				} else {
+					/* console.log('Concesionario data es ............', consesionariosData); */
+					consesionariosData.map(concesionario => {
+						if (concesionario.store_code == codeConcesionario) {
+							$('#codeConcesionario').val(concesionario.store_name);
+						}
+					})
+					arrayCodes = codeConcesionario;
+				}
 
-					code = arrayCodes;
-					
-					var current_landing = '<?php echo $current_landing; ?>';
-					var id_cotizador = '';
+				code = arrayCodes;
 
-					var startRange = $('#initDate').val();
-					var endRangeDate = $('#endDate').val();
+
+				var current_landing = '<?php echo $current_landing; ?>';
+				var current_landing2 = '<?php if(isset($current_landing2)) echo $current_landing2; else echo null;?>';
+				var id_cotizador = '';
+
+				var startRange = $('#initDate').val();
+				var endRangeDate = $('#endDate').val();
+				$('#fechaInicial').val(startRange);
+				$('#fechaFinal').val(endRangeDate);
+
+				console.log(startRange, endRangeDate);
+
+				if (startRange == '' && endRangeDate == '') {
+					startRange = '<?php echo $initDate; ?>';
+					endRangeDate = '<?php echo $endDate; ?>';
 					$('#fechaInicial').val(startRange);
-						$('#fechaFinal').val(endRangeDate);
+					$('#fechaFinal').val(endRangeDate);
+				}
 
-					console.log(startRange, endRangeDate);
+				//console.log(current_landing);
 
-					if (startRange == '' && endRangeDate == '') {
-						startRange = '<?php echo $initDate; ?>';
-						endRangeDate = '<?php echo $endDate; ?>';
-						$('#fechaInicial').val(startRange);
-						$('#fechaFinal').val(endRangeDate);
+				$('#kt_datatable').KTDatatable('destroy');
+				$('#kt_datatable').KTDatatable('reload');
+
+				var params = {
+					date1: startRange,
+					date2: endRangeDate
+				};
+
+				if (current_landing && current_landing !== '') {
+					var arrayurl1_w2l = [];
+					arrayurl1_w2l.push(current_landing);
+					if (current_landing2){
+						arrayurl1_w2l.push(current_landing2);
 					}
+					params = {
+						...params,
+						url1_w2l: arrayurl1_w2l
+					}
+				}
 
-					//console.log(current_landing);
+				if (code && code !== '') {
+					params = {
+						...params,
+						store: code
+					}
+				}
 
-					$('#kt_datatable').KTDatatable('destroy');
-					$('#kt_datatable').KTDatatable('reload');
-					var datatable = $('#kt_datatable').KTDatatable({
-						
-						// datasource definition
-						data: {
-							type: 'remote',
-							source: {
-								read: {
-									url: '<?php echo $update_por_tienda; ?>',
-									headers: {
-										'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo', 
-										'Accept': 'application/json',
-									},
-									//contentType: 'application/json',
-									params: {
-										url1_w2l: current_landing,
-										store: code,
-										date1: startRange,
-										date2: endRangeDate
-									},
-									map: function(raw) {
-										// sample data mapping
-										var dataSet = raw;
-										if (typeof raw.data !== 'undefined') {
-											dataSet = raw.data;
-											dataTableRaw = dataSet;
-										}
-										return dataSet;
-									},
+				var datatable = $('#kt_datatable').KTDatatable({
+
+					// datasource definition
+					data: {
+						type: 'remote',
+						source: {
+							read: {
+								url: '<?php echo $update_por_tienda; ?>',
+								headers: {
+									'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo',
+									'Accept': 'application/json',
+								},
+								//contentType: 'application/json',
+								params: params,
+								map: function(raw) {
+									// sample data mapping
+									var dataSet = raw;
+									if (typeof raw.data !== 'undefined') {
+										dataSet = raw.data;
+										dataTableRaw = dataSet;
+									}
+									return dataSet;
 								},
 							},
-							pageSize: 50,
-							serverPaging: false,
-							serverFiltering: false,
-							serverSorting: false,
 						},
-						// layout definition
-						layout: {
-							scroll: false,
-							footer: false,
+						pageSize: 50,
+						serverPaging: false,
+						serverFiltering: false,
+						serverSorting: false,
+					},
+					// layout definition
+					layout: {
+						scroll: false,
+						footer: false,
+					},
+
+					// column sorting
+					sortable: true,
+
+					pagination: true,
+
+					search: {
+						input: $('#generalSearch'),
+					},
+
+					translate: {
+						records: {
+							processing: 'Cargando leads...',
+							noRecords: 'No se encontraron leads.',
 						},
 
-						// column sorting
-						sortable: true,
+						toolbar: {
+							pagination: {
+								items: {
+									default: {
+										first: 'Inicio',
+										prev: 'Anterior',
+										next: 'Siguiente',
+										last: 'Fin',
+										more: 'Más páginas',
+										input: 'Número de página',
+										select: 'Máximo por página',
+									},
 
-						pagination: true,
-
-						search: {
-							input: $('#generalSearch'),
-						},
-
-						translate: {
-							records: {
-								processing: 'Cargando leads...',
-								noRecords: 'No se encontraron leads.',
-							},
-
-							toolbar: {
-								pagination: {
-									items: {
-										default: {
-											first: 'Inicio',
-											prev: 'Anterior',
-											next: 'Siguiente',
-											last: 'Fin',
-											more: 'Más páginas',
-											input: 'Número de página',
-											select: 'Máximo por página',
-										},
-
-										info: '{{start}} - {{end}} de {{total}} leads',
-									}
+									info: '{{start}} - {{end}} de {{total}} leads',
 								}
-							},
-						},
-
-						// columns definition
-						columns: [{
-							field: 'id',
-							title: '#',
-							sortable: 'asc',
-							width: 30,
-							type: 'number',
-							selector: false,
-							textAlign: 'center',
-						}, {
-							field: 'marca2',
-							title: 'Marca',
-						}, {
-							field: 'model_w2l',
-							title: 'Modelo',
-						}, {
-							field: 'version_w2l',
-							title: 'Versión',
-						}, {
-							field: 'rut_w2l',
-							title: 'Número de Documento',
-						},{
-							field: 'first_name',
-							title: 'Nombres',
-						}, {
-							field: 'last_name',
-							title: 'Apellidos',
-						}, {
-							field: 'fone1_w2l',
-							title: 'Celular',
-						}, {
-							field: 'created_at',
-							title: 'Creado',
-							autoHide: false,
-							type: 'date',
-							//format: 'DD/MM/YYYY HH:mm:ss',
-						}, {
-							field: 'estado',
-							title: 'Status',
-							overflow: 'visible',
-							autoHide: false,
-							// callback function support for column rendering
-							template: function(row) {
-								var status = {
-									'Nuevo': {
-										'title': 'Nuevo',
-										'class': ' label-light-success'
-									},
-									'Contactado': {
-										'title': 'Contactado',
-										'class': ' label-light-danger'
-									},
-									'Cotizado': {
-										'title': 'Cotizado',
-										'class': ' label-light-primary'
-									},
-									'Facturado': {
-										'title': 'Facturado',
-										'class': ' label-light-success'
-									},
-									'Cancelado': {
-										'title': 'Cancelado',
-										'class': ' label-light-info'
-									},
-									'Gestionado': {
-										'title': 'Gestionado',
-										'class': ' label-light-dark'
-									},
-								};
-								return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
-							},
-						}, {
-							field: '_id',
-							title: 'ID Cotizador',
-							visible: false,
-							template: function (row) {
-								id_cotizador = row._id;
-								return id_cotizador; 
 							}
-						}, {
-							field: 'Actions',
-							title: 'Acciones',
-							sortable: false,
-							//width: 80,
-							overflow: 'visible',
-							autoHide: false,
-							template: function() {
-								return '\
+						},
+					},
+
+					// columns definition
+					columns: [{
+						field: 'id',
+						title: '#',
+						sortable: 'asc',
+						width: 30,
+						type: 'number',
+						selector: false,
+						textAlign: 'center',
+					}, {
+						field: 'marca2',
+						title: 'Marca',
+					}, {
+						field: 'model_w2l',
+						title: 'Modelo',
+					}, {
+						field: 'version_w2l',
+						title: 'Versión',
+					}, {
+						field: 'rut_w2l',
+						title: 'Número de Documento',
+					}, {
+						field: 'first_name',
+						title: 'Nombres',
+					}, {
+						field: 'last_name',
+						title: 'Apellidos',
+					}, {
+						field: 'fone1_w2l',
+						title: 'Celular',
+					}, {
+						field: 'created_at',
+						title: 'Creado',
+						autoHide: false,
+						type: 'date',
+						//format: 'DD/MM/YYYY HH:mm:ss',
+					}, {
+						field: 'estado',
+						title: 'Status',
+						overflow: 'visible',
+						autoHide: false,
+						// callback function support for column rendering
+						template: function(row) {
+							var status = {
+								'Nuevo': {
+									'title': 'Nuevo',
+									'class': ' label-light-success'
+								},
+								'Contactado': {
+									'title': 'Contactado',
+									'class': ' label-light-danger'
+								},
+								'Cotizado': {
+									'title': 'Cotizado',
+									'class': ' label-light-primary'
+								},
+								'Facturado': {
+									'title': 'Facturado',
+									'class': ' label-light-success'
+								},
+								'Cancelado': {
+									'title': 'Cancelado',
+									'class': ' label-light-info'
+								},
+								'Gestionado': {
+									'title': 'Gestionado',
+									'class': ' label-light-dark'
+								},
+							};
+							return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+						},
+					}, {
+						field: '_id',
+						title: 'ID Cotizador',
+						visible: false,
+						template: function(row) {
+							id_cotizador = row._id;
+							return id_cotizador;
+						}
+					}, {
+						field: 'Actions',
+						title: 'Acciones',
+						sortable: false,
+						//width: 80,
+						overflow: 'visible',
+						autoHide: false,
+						template: function() {
+							return '\
 									<div class="dropdown dropdown-inline">\
 										<a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
 											<svg xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
@@ -676,37 +726,37 @@ if ($user_type == 'Administrador') {
 													Cambiar estado:\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
 														<span class="navi-text">Nuevo</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
 														<span class="navi-text">Contactado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
 														<span class="navi-text">Cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Facturado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Facturado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-handshake"></i></span>\
 														<span class="navi-text">Facturado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
 														<span class="navi-text">Cancelado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
-													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador +'" data-code="'+ code +'" data-landing="'+ current_landing +'" class="navi-link">\
+													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
 														<span class="navi-text">Gestionado</span>\
 													</a>\
@@ -715,62 +765,62 @@ if ($user_type == 'Administrador') {
 										</div>\
 									</div>\
 								';
-							},
-						}],
-					});
+						},
+					}],
+				});
 
-
-					return {
-						datatable: function() {
-							return datatable;
-						}
-					};
-				};
-
-				var eventsCapture = function() {
-					$('#kt_datatable').on('datatable-on-init', function() {
-						eventsWriter('Datatable init');
-					}).on('datatable-on-layout-updated', function() {
-						eventsWriter('Layout render updated');
-					}).on('datatable-on-ajax-done', function() {
-						eventsWriter('Ajax data successfully updated');
-					}).on('datatable-on-ajax-fail', function(e, jqXHR) {
-						eventsWriter('Ajax error');
-					}).on('datatable-on-goto-page', function(e, args) {
-						eventsWriter('Goto to pagination: ' + args.page);
-					}).on('datatable-on-update-perpage', function(e, args) {
-						eventsWriter('Update page size: ' + args.perpage);
-					}).on('datatable-on-reloaded', function(e) {
-						eventsWriter('Datatable reloaded');
-					}).on('datatable-on-check', function(e, args) {
-						eventsWriter('Checkbox active: ' + args.toString());
-					}).on('datatable-on-uncheck', function(e, args) {
-						eventsWriter('Checkbox inactive: ' + args.toString());
-					}).on('datatable-on-sort', function(e, args) {
-						eventsWriter('Datatable sorted by ' + args.field + ' ' + args.sort);
-					});
-				};
-
-				var eventsWriter = function(string) {
-					console.log(string);
-				};
 
 				return {
-					// public functions
-					init: function() {
-						initTableLanding();
-						eventsCapture();
-					},
-
-					reloadData: function() {
-						getLeads();
-						eventsCapture();
-					},
+					datatable: function() {
+						return datatable;
+					}
 				};
+			};
 
-			}();
+			var eventsCapture = function() {
+				$('#kt_datatable').on('datatable-on-init', function() {
+					eventsWriter('Datatable init');
+				}).on('datatable-on-layout-updated', function() {
+					eventsWriter('Layout render updated');
+				}).on('datatable-on-ajax-done', function() {
+					eventsWriter('Ajax data successfully updated');
+				}).on('datatable-on-ajax-fail', function(e, jqXHR) {
+					eventsWriter('Ajax error');
+				}).on('datatable-on-goto-page', function(e, args) {
+					eventsWriter('Goto to pagination: ' + args.page);
+				}).on('datatable-on-update-perpage', function(e, args) {
+					eventsWriter('Update page size: ' + args.perpage);
+				}).on('datatable-on-reloaded', function(e) {
+					eventsWriter('Datatable reloaded');
+				}).on('datatable-on-check', function(e, args) {
+					eventsWriter('Checkbox active: ' + args.toString());
+				}).on('datatable-on-uncheck', function(e, args) {
+					eventsWriter('Checkbox inactive: ' + args.toString());
+				}).on('datatable-on-sort', function(e, args) {
+					eventsWriter('Datatable sorted by ' + args.field + ' ' + args.sort);
+				});
+			};
 
-			// Class definition
+			var eventsWriter = function(string) {
+				console.log(string);
+			};
+
+			return {
+				// public functions
+				init: function() {
+					initTableLanding();
+					eventsCapture();
+				},
+
+				reloadData: function() {
+					getLeads();
+					eventsCapture();
+				},
+			};
+
+		}();
+
+		// Class definition
 		var KTDatatableLocalDataLeads = function() {
 			// Private functions
 			var initTableLanding = function() {
@@ -1281,222 +1331,275 @@ if ($user_type == 'Administrador') {
 
 		}();
 
-			jQuery(document).ready(function() {
-				KTDatatableRemoteAjaxLeads.init();
-				KTDatatableLocalDataLeads.init();
+		jQuery(document).ready(function() {
+			KTDatatableRemoteAjaxLeads.init();
+			KTDatatableLocalDataLeads.init();
+		});
+
+		var updateLeadStatus = function(id, estado) {
+			var myHeaders = new Headers();
+			myHeaders.append("Authorization", "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo");
+			myHeaders.append("Accept", "application/json");
+			myHeaders.append("Content-Type", "application/json");
+
+			var raw = JSON.stringify({
+				"id": id,
+				"estado": estado
 			});
 
-			var updateLeadStatus = function(id, estado) {
-				var myHeaders = new Headers();
-				myHeaders.append("Authorization", "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo");
-				myHeaders.append("Accept", "application/json");
-				myHeaders.append("Content-Type", "application/json");
+			var requestOptions = {
+				method: 'PUT',
+				headers: myHeaders,
+				body: raw,
+				redirect: 'follow'
+			};
 
-				var raw = JSON.stringify({"id":id,"estado":estado});
-
-				var requestOptions = {
-					method: 'PUT',
-					headers: myHeaders,
-					body: raw,
-					redirect: 'follow'
-				};
-
-				fetch("https://cotizadorderco.com/clients/updateEstado", requestOptions)
+			fetch("https://cotizadorderco.com/clients/updateEstado", requestOptions)
 				.then((response) => response.json()) // Transform the data into json
-				.then(function(data){
+				.then(function(data) {
 					let respuesta = data.status;
-					
-					if(data.status) {
+
+					if (data.status) {
 						KTDatatableRemoteAjaxLeads.reloadData();
 					} else {
 						console.log('Error');
 					}
 				})
-				.catch(function(error){
+				.catch(function(error) {
 					console.log(error);
 				});
-			}
+		}
 
-			var updateLeadStatusAmicar = function(id, estado) {
-				var myHeaders = new Headers();
-				myHeaders.append("Accept", "application/json"); 
-				myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+		var updateLeadStatusAmicar = function(id, estado) {
+			var myHeaders = new Headers();
+			myHeaders.append("Accept", "application/json");
+			myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-				$.ajax({
-					url: 'https://derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php',
-					type: 'POST',
-					data: {
-						id: id,
-						estado: estado
-					},
-					dataType : 'json',
-					success: function (response) {
-						if (response.status) {
-							console.log(response);
-							KTDatatableLocalDataLeads.reloadData();
-						} else {
-							console.log('Error');
-						}	
-					},
-					error: function(err){
-						console.log('Error al actualizar el estado')
+			$.ajax({
+				url: 'https://derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php',
+				type: 'POST',
+				data: {
+					id: id,
+					estado: estado
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status) {
+						console.log(response);
+						KTDatatableLocalDataLeads.reloadData();
+					} else {
+						console.log('Error');
 					}
-				})
-			}
+				},
+				error: function(err) {
+					console.log('Error al actualizar el estado')
+				}
+			})
+		}
 
-			function updateStoreId(store_id) {
-				global_current_store_code = store_id;
-				
-				KTDatatableRemoteAjaxLeads.reloadData();
-			}
+		function updateStoreId(store_id) {
+			global_current_store_code = store_id;
+			KTDatatableRemoteAjaxLeads.reloadData();
+		}
 
-			function updateStoreIdAmicar(store_id) {
-				global_current_store_code = store_id;
-				KTDatatableLocalDataLeads.reloadData();
-			}
+		function updateStoreIdAmicar(store_id) {
+			global_current_store_code = store_id;
+			KTDatatableLocalDataLeads.reloadData();
+		}
 
-			function updateDateRange() {
-				KTDatatableRemoteAjaxLeads.reloadData();
-			}
+		function updateDateRange() {
+			KTDatatableRemoteAjaxLeads.reloadData();
+		}
 
-			function updateDateRangeAmicar() {
-				KTDatatableLocalDataLeads.reloadData();
-			}
-			
-			function setTodasTable(){
-				KTDatatableRemoteAjaxLeads.init();
-			}
+		function updateDateRangeAmicar() {
+			KTDatatableLocalDataLeads.reloadData();
+		}
 
-			function downloadExcel() {
+		function setTodasTable() {
+			KTDatatableRemoteAjaxLeads.init();
+		}
 
-				var createXLSLFormatObj = [];
-				var xlsHeader = ['DOCUMENTO DE IDENTIDAD', 'MARCA', 'MODELO', 'TIENDA', 'FECHA DE RECEPCION', 'CONTACTADO', 'PROSPECTO', 'RESERVA', 'FACTURADO', 'CANCELADO'];
+		function downloadExcel() {
 
-				var xlsRows = [];
+			var createXLSLFormatObj = [];
+			var xlsHeader = ['#', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'DIRECCIÓN', 'DISTRITO', 'ESTADO', ' - ', 'FECHA DE REGISTRO'];
 
-				let xlsRowsMap = dataTableRaw.map(({
-					_id,
-					id,
-					id_w2l,
-					first_name,
-					last_name,
-					fone1_w2l,
-					email,
-					state,
-					url1_w2l,
-					url2_w2l,
-					brand_w2l,
-					version_w2l,
-					sap_w2l,
-					price_w2l,
-					cod_origen2_w2l,
-					store,
-					terms,
-					tipo_documento,
-					razon_social,
-					direccion,
-					distrito,
-					estado,
-					updated_at,
-					...keepFields
-				}) => keepFields);
+			var xlsRows = [];
+			xlsRows.push(dataTableRaw);
 
-				let xlsRowsFinal = xlsRowsMap.map(row => {
-					const { updateFecha, ...keepFields } = row;
-					let newrow = {};
-					newrow = {...newrow, ...{Contactado: updateFecha.contactado_date ? 'SI' : 'NO'}}
-					newrow = {...newrow, ...{Prospecto: updateFecha.cotizado_date ? 'SI' : 'NO'}}
-					newrow = {...newrow, ...{Reserva: updateFecha.gestionado_date ? 'SI' : 'NO'}}
-					newrow = {...newrow, ...{Facturado: updateFecha.facturado_date ? 'SI' : 'NO'}}
-					newrow = {...newrow, ...{Cancelado: updateFecha.cancelado_date ? 'SI' : 'NO'}}
-					return {...keepFields, ...newrow};
-				})
+			createXLSLFormatObj.push(xlsHeader);
 
-				xlsRows.push(xlsRowsFinal);
-
-				createXLSLFormatObj.push(xlsHeader);
-
-				var count = 0;
+			var count = 0;
 
 
-				$.each(xlsRows[0], function(index, value) {
-					var innerRowData = [];
+			$.each(xlsRows[0], function(index, value) {
+				var innerRowData = [];
 
-					$.each(value, function(ind, val) {
-						innerRowData.push(val);
-					});
-
-					count++;
-
-					createXLSLFormatObj.push(innerRowData);
+				$.each(value, function(ind, val) {
+					innerRowData.push(val);
 				});
 
-				var filename = "CES_LEADS.xlsx";
-				var ws_name = "Reporte de LEADS";
+				count++;
 
-				if (typeof console !== 'undefined') console.log(new Date());
-				var wb = XLSX.utils.book_new(),
-					ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+				createXLSLFormatObj.push(innerRowData);
+			});
 
+			var filename = "CES_LEADS.xlsx";
+			var ws_name = "Reporte de LEADS";
 
-				XLSX.utils.book_append_sheet(wb, ws, ws_name);
-
-
-				if (typeof console !== 'undefined') console.log(new Date());
-				XLSX.writeFile(wb, filename);
-				if (typeof console !== 'undefined') console.log(new Date());
-			}
-
-			function downloadExcelAmicar() {
-
-				var createXLSLFormatObj = [];
-				var xlsHeader = ['#', 'TIPO DOCUMENTO', 'DOI', 'LINEA VEHICULAR', 'CUOTA', 'PLAZO', 'NOMBRE', 'TIENDA', 'TELEFONO', 'EMAIL', 'REGISTRO', 'ESTADO'];
-
-				var xlsRows = [];
-
-				const xlsRowsMap = dataTableRaw.map(({coddoc_base, nuevo_date, contactado_date, gestionado_date, cotizado_date, facturado_date, cancelado_date, real_id, ...keepFields}) => keepFields);
-
-				xlsRows.push(xlsRowsMap);
-
-				createXLSLFormatObj.push(xlsHeader);
-
-				var count = 0;
+			if (typeof console !== 'undefined') console.log(new Date());
+			var wb = XLSX.utils.book_new(),
+				ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
 
 
-				$.each(xlsRows[0], function(index, value) {
-					var innerRowData = [];
+			XLSX.utils.book_append_sheet(wb, ws, ws_name);
 
-					$.each(value, function(ind, val) {
-						innerRowData.push(val);
-					});
 
-					count++;
+			if (typeof console !== 'undefined') console.log(new Date());
+			XLSX.writeFile(wb, filename);
+			if (typeof console !== 'undefined') console.log(new Date());
+		}
 
-					createXLSLFormatObj.push(innerRowData);
+		/* function downloadExcel() {
+
+			var createXLSLFormatObj = [];
+			var xlsHeader = ['DOCUMENTO DE IDENTIDAD', 'MARCA', 'MODELO', 'TIENDA', 'FECHA DE RECEPCION', 'CONTACTADO', 'PROSPECTO', 'RESERVA', 'FACTURADO', 'CANCELADO'];
+
+			var xlsRows = [];
+
+			let xlsRowsMap = dataTableRaw.map(({
+				_id,
+				id,
+				id_w2l,
+				first_name,
+				last_name,
+				fone1_w2l,
+				email,
+				state,
+				url1_w2l,
+				url2_w2l,
+				brand_w2l,
+				version_w2l,
+				sap_w2l,
+				price_w2l,
+				cod_origen2_w2l,
+				store,
+				terms,
+				tipo_documento,
+				razon_social,
+				direccion,
+				distrito,
+				estado,
+				updated_at,
+				...keepFields
+			}) => keepFields);
+
+			let xlsRowsFinal = xlsRowsMap.map(row => {
+				const { updateFecha, ...keepFields } = row;
+				let newrow = {};
+				newrow = {...newrow, ...{Contactado: updateFecha.contactado_date ? 'SI' : 'NO'}}
+				newrow = {...newrow, ...{Prospecto: updateFecha.cotizado_date ? 'SI' : 'NO'}}
+				newrow = {...newrow, ...{Reserva: updateFecha.gestionado_date ? 'SI' : 'NO'}}
+				newrow = {...newrow, ...{Facturado: updateFecha.facturado_date ? 'SI' : 'NO'}}
+				newrow = {...newrow, ...{Cancelado: updateFecha.cancelado_date ? 'SI' : 'NO'}}
+				return {...keepFields, ...newrow};
+			})
+
+			xlsRows.push(xlsRowsFinal);
+
+			createXLSLFormatObj.push(xlsHeader);
+
+			var count = 0;
+
+
+			$.each(xlsRows[0], function(index, value) {
+				var innerRowData = [];
+
+				$.each(value, function(ind, val) {
+					innerRowData.push(val);
 				});
 
-				var filename = "CES_LEADS_AMICAR.xlsx";
-				var ws_name = "Reporte de LEADS";
+				count++;
 
-				if (typeof console !== 'undefined') console.log(new Date());
-				var wb = XLSX.utils.book_new(),
-					ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+				createXLSLFormatObj.push(innerRowData);
+			});
+
+			var filename = "CES_LEADS.xlsx";
+			var ws_name = "Reporte de LEADS";
+
+			if (typeof console !== 'undefined') console.log(new Date());
+			var wb = XLSX.utils.book_new(),
+				ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
 
 
-				XLSX.utils.book_append_sheet(wb, ws, ws_name);
+			XLSX.utils.book_append_sheet(wb, ws, ws_name);
 
 
-				if (typeof console !== 'undefined') console.log(new Date());
-				XLSX.writeFile(wb, filename);
-				if (typeof console !== 'undefined') console.log(new Date());
-			}
+			if (typeof console !== 'undefined') console.log(new Date());
+			XLSX.writeFile(wb, filename);
+			if (typeof console !== 'undefined') console.log(new Date());
+		} */
 
-		</script>
-		<!--begin::Page Vendors(used by this page)-->
-		<script src="assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script>
-		
-		<!--end::Page Scripts-->
-	</body>
+		function downloadExcelAmicar() {
 
-	<!--end::Body-->
+			var createXLSLFormatObj = [];
+			var xlsHeader = ['#', 'TIPO DOCUMENTO', 'DOI', 'LINEA VEHICULAR', 'CUOTA', 'PLAZO', 'NOMBRE', 'TIENDA', 'TELEFONO', 'EMAIL', 'REGISTRO', 'ESTADO'];
+
+			var xlsRows = [];
+
+			const xlsRowsMap = dataTableRaw.map(({
+				coddoc_base,
+				nuevo_date,
+				contactado_date,
+				gestionado_date,
+				cotizado_date,
+				facturado_date,
+				cancelado_date,
+				real_id,
+				...keepFields
+			}) => keepFields);
+
+			xlsRows.push(xlsRowsMap);
+
+			createXLSLFormatObj.push(xlsHeader);
+
+			var count = 0;
+
+
+			$.each(xlsRows[0], function(index, value) {
+				var innerRowData = [];
+
+				$.each(value, function(ind, val) {
+					innerRowData.push(val);
+				});
+
+				count++;
+
+				createXLSLFormatObj.push(innerRowData);
+			});
+
+			var filename = "CES_LEADS_AMICAR.xlsx";
+			var ws_name = "Reporte de LEADS";
+
+			if (typeof console !== 'undefined') console.log(new Date());
+			var wb = XLSX.utils.book_new(),
+				ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+
+			XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+
+			if (typeof console !== 'undefined') console.log(new Date());
+			XLSX.writeFile(wb, filename);
+			if (typeof console !== 'undefined') console.log(new Date());
+		}
+	</script>
+	<!--begin::Page Vendors(used by this page)-->
+	<script src="assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script>
+
+	<!--end::Page Scripts-->
+</body>
+
+<!--end::Body-->
+
 </html>

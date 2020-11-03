@@ -366,15 +366,15 @@ if ($user_type == 'Administrador') {
 						template: function(row) {
 							var status = {
 								'Nuevo': {
-									'title': 'Nuevo',
+									'title': 'Por gestionar',
 									'class': ' label-light-success'
 								},
 								'Contactado': {
-									'title': 'Contactado',
+									'title': 'Contactado-cerrado',
 									'class': ' label-light-danger'
 								},
 								'Cotizado': {
-									'title': 'Cotizado',
+									'title': 'Contactado-cotizado',
 									'class': ' label-light-primary'
 								},
 								'Facturado': {
@@ -382,15 +382,15 @@ if ($user_type == 'Administrador') {
 									'class': ' label-light-success'
 								},
 								'Cancelado': {
-									'title': 'Cancelado',
+									'title': 'Reservado',
 									'class': ' label-light-info'
 								},
 								'Gestionado': {
-									'title': 'Gestionado',
+									'title': 'No Contactado',
 									'class': ' label-light-dark'
 								},
 							};
-							return '<span id="label-' + status[row.estado].title + '"class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+							return '<p id="label-' + status[row.estado].title + '"class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline py-5">' + status[row.estado].title + '</p>';
 						},
 					}, {
 						field: '_id',
@@ -427,19 +427,19 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
-														<span class="navi-text">Nuevo</span>\
+														<span class="navi-text">Por gestionar</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
-														<span class="navi-text">Contactado</span>\
+														<span class="navi-text">Contactado-cerrado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
-														<span class="navi-text">Cotizado</span>\
+														<span class="navi-text">Contactado-cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
@@ -451,13 +451,13 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Cancelado</span>\
+														<span class="navi-text">Reservado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Gestionado</span>\
+														<span class="navi-text">No Contactado</span>\
 													</a>\
 												</li>\
 											</ul>\
@@ -667,15 +667,15 @@ if ($user_type == 'Administrador') {
 						template: function(row) {
 							var status = {
 								'Nuevo': {
-									'title': 'Nuevo',
+									'title': 'Por gestionar',
 									'class': ' label-light-success'
 								},
 								'Contactado': {
-									'title': 'Contactado',
+									'title': 'Contactado-cerrado',
 									'class': ' label-light-danger'
 								},
 								'Cotizado': {
-									'title': 'Cotizado',
+									'title': 'Contactado-cotizado',
 									'class': ' label-light-primary'
 								},
 								'Facturado': {
@@ -683,15 +683,15 @@ if ($user_type == 'Administrador') {
 									'class': ' label-light-success'
 								},
 								'Cancelado': {
-									'title': 'Cancelado',
+									'title': 'Reservado',
 									'class': ' label-light-info'
 								},
 								'Gestionado': {
-									'title': 'Gestionado',
+									'title': 'No Contactado',
 									'class': ' label-light-dark'
 								},
 							};
-							return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+							return '<p class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline py-5">' + status[row.estado].title + '</p>';
 						},
 					}, {
 						field: '_id',
@@ -728,19 +728,19 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
-														<span class="navi-text">Nuevo</span>\
+														<span class="navi-text">Por gestionar</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
-														<span class="navi-text">Contactado</span>\
+														<span class="navi-text">Contactado-cerrado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
-														<span class="navi-text">Cotizado</span>\
+														<span class="navi-text">Contactado-cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
@@ -752,13 +752,13 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Cancelado</span>\
+														<span class="navi-text">Reservado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatus(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" data-landing="' + current_landing + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Gestionado</span>\
+														<span class="navi-text">No Contactado</span>\
 													</a>\
 												</li>\
 											</ul>\
@@ -947,15 +947,15 @@ if ($user_type == 'Administrador') {
 						template: function(row) {
 							var status = {
 								'Nuevo': {
-									'title': 'Nuevo',
+									'title': 'Por gestionar',
 									'class': ' label-light-success'
 								},
 								'Contactado': {
-									'title': 'Contactado',
+									'title': 'Contactado-cerrado',
 									'class': ' label-light-danger'
 								},
 								'Cotizado': {
-									'title': 'Cotizado',
+									'title': 'Contactado-cotizado',
 									'class': ' label-light-primary'
 								},
 								'Facturado': {
@@ -963,15 +963,15 @@ if ($user_type == 'Administrador') {
 									'class': ' label-light-success'
 								},
 								'Cancelado': {
-									'title': 'Cancelado',
+									'title': 'Reservado',
 									'class': ' label-light-info'
 								},
 								'Gestionado': {
-									'title': 'Gestionado',
+									'title': 'No Contactado',
 									'class': ' label-light-dark'
 								},
 							};
-							return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+							return '<p class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline py-5">' + status[row.estado].title + '</p>';
 						},
 					}, {
 						field: 'real_id',
@@ -1008,19 +1008,19 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
-														<span class="navi-text">Nuevo</span>\
+														<span class="navi-text">Por gestionar</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
-														<span class="navi-text">Contactado</span>\
+														<span class="navi-text">Contactado-cerrado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
-														<span class="navi-text">Cotizado</span>\
+														<span class="navi-text">Contactado-cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
@@ -1032,13 +1032,13 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Cancelado</span>\
+														<span class="navi-text">Reservado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Gestionado</span>\
+														<span class="navi-text">No Contactado</span>\
 													</a>\
 												</li>\
 											</ul>\
@@ -1178,15 +1178,15 @@ if ($user_type == 'Administrador') {
 						template: function(row) {
 							var status = {
 								'Nuevo': {
-									'title': 'Nuevo',
+									'title': 'Por gestionar',
 									'class': ' label-light-success'
 								},
 								'Contactado': {
-									'title': 'Contactado',
+									'title': 'Contactado-cerrado',
 									'class': ' label-light-danger'
 								},
 								'Cotizado': {
-									'title': 'Cotizado',
+									'title': 'Contactado-cotizado',
 									'class': ' label-light-primary'
 								},
 								'Facturado': {
@@ -1194,15 +1194,15 @@ if ($user_type == 'Administrador') {
 									'class': ' label-light-success'
 								},
 								'Cancelado': {
-									'title': 'Cancelado',
+									'title': 'Reservado',
 									'class': ' label-light-info'
 								},
 								'Gestionado': {
-									'title': 'Gestionado',
+									'title': 'No Contactado',
 									'class': ' label-light-dark'
 								},
 							};
-							return '<span class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline">' + status[row.estado].title + '</span>';
+							return '<p class="label font-weight-bold label-lg ' + status[row.estado].class + ' label-inline py-5">' + status[row.estado].title + '</p>';
 						},
 					}, {
 						field: 'real_id',
@@ -1239,19 +1239,19 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Nuevo" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-star"></i></span>\
-														<span class="navi-text">Nuevo</span>\
+														<span class="navi-text">Por gestionar</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Contactado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-volume-control-phone"></i></span>\
-														<span class="navi-text">Contactado</span>\
+														<span class="navi-text">Contactado-cerrado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cotizado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-file-invoice-dollar"></i></span>\
-														<span class="navi-text">Cotizado</span>\
+														<span class="navi-text">Contactado-cotizado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
@@ -1263,13 +1263,13 @@ if ($user_type == 'Administrador') {
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Cancelado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Cancelado</span>\
+														<span class="navi-text">Reservado</span>\
 													</a>\
 												</li>\
 												<li class="navi-item">\
 													<a href="javascript:void(0);" onclick="updateLeadStatusAmicar(this.dataset.id, this.dataset.status, this.dataset.code, this.dataset.landing);" data-status="Gestionado" data-id="' + id_cotizador + '" data-code="' + code + '" class="navi-link">\
 														<span class="navi-icon"><i class="la la-window-close"></i></span>\
-														<span class="navi-text">Gestionado</span>\
+														<span class="navi-text">No Contactado</span>\
 													</a>\
 												</li>\
 											</ul>\

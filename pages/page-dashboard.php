@@ -124,6 +124,8 @@ $totales_response = json_decode($response);
 //Conversion a array
 $nuevo_array = arrayCastRecursive($totales_response);
 
+$arrayExcel = array();
+
 curl_close($curl);
 
 // ************************************************************
@@ -149,26 +151,37 @@ if ($_SESSION['user_type'] == 'Administrador') {
             if ($lead['url1_w2l'] != '') {
                 if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
                     array_push($arrayCatalogoDerco, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                     array_push($arrayDercoOulet, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                     array_push($arrayCyberGO, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
                     array_push($arraySuzuki, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
                     array_push($arrayMazda, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
                     array_push($arrayRenault, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
                     array_push($arrayChangan, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
                     array_push($arrayHaval, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
                     array_push($arrayJac, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
                     array_push($arrayCitroen, $lead);
+                    array_push($arrayExcel, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
                     array_push($arrayGreatWall, $lead);
+                    array_push($arrayExcel, $lead);
                 } else {
                     array_push($arrayExceptions, $lead);
                 }
@@ -228,6 +241,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
                 foreach ($array_codigos as $store_code => $key) {
                     if (in_array($lead['store'], array_column($array_codigos[$store_code]['tiendas'], 'code'))) {
                         array_push($arrayConcesionarios[$array_codigos[$store_code]['concesionario']], $lead);
+                        array_push($arrayExcel, $lead);
                         $band = true;
                     }
                 }
@@ -291,26 +305,37 @@ if ($_SESSION['user_type'] == 'Administrador') {
                     if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
                         if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
                             array_push($arrayCatalogoDerco, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                             array_push($arrayDercoOulet, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                             array_push($arrayCyberGO, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
                             array_push($arraySuzuki, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
                             array_push($arrayMazda, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
                             array_push($arrayRenault, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
                             array_push($arrayChangan, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
                             array_push($arrayHaval, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
                             array_push($arrayJac, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
                             array_push($arrayCitroen, $lead);
+                            array_push($arrayExcel, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
                             array_push($arrayGreatWall, $lead);
+                            array_push($arrayExcel, $lead);
                         } else {
                             array_push($arrayExceptions, $lead);
                         }
@@ -319,7 +344,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
                 }
             }
         }
-        print_r($arrayTotales);
+        /* print_r($arrayTotales); */
         /* print_r($arrayExceptions); */
         $arrayTablaFinal = array();
         array_push($arrayTablaFinal, getData($arrayTotales, 'Total de Leads General'));
@@ -370,6 +395,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
                 foreach ($array_codigos as $store_code => $key) {
                     if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
                         array_push($arrayTiendas[$array_codigos[$store_code]['store_name']], $lead);
+                        array_push($arrayExcel, $lead);
                         array_push($arrayTiendas['Total de Leads General'], $lead);
                     }
                 }
@@ -412,45 +438,50 @@ if ($_SESSION['user_type'] == 'Administrador') {
     <!--begin::Container-->
     <div class="container">
         <!--begin::Dashboard-->
-
-        <div class="col-sm-5 text-left mb-5">
-            <form action="index.php?page=dashboard" method="POST">
-                <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard" tabindex="-98">
-                    <option selected disabled>Seleccione una opción</option>
-                    <option><?php if ($isAdmin) echo 'Por Concesionarios';
-                            else {
-                                echo 'Por Tienda';
-                            } ?></option>
-                    <option>Por Campaña y Websites</option>
-                </select>
-                <span>Rango de fechas:</span>
-                <div class="input-daterange input-group" id="kt_datepicker_5">
-                    <input id="initDate" type="text" class="form-control" name="start" />
-                    <div class="input-group-append">
-                        <span class="input-group-text">
-                            <i class="la la-ellipsis-h"></i>
-                        </span>
-                    </div>
-                    <input id="endDate" type="text" class="form-control" name="end" />
-                </div>
-                <span class="form-text text-muted">Seleccione un rango de fechas</span>
-                <button type="submit" class="btn btn-primary">Filtrar</button>
-                <div class="mt-6">
-                    <h5 style="<?php if ($isAdmin) echo 'display:block';
+        <div class="row">
+            <div class="col-sm-5 text-left mb-5">
+                <form action="index.php?page=dashboard" method="POST">
+                    <select class=" btn-group bootstrap-select bs-select form-control" name="optionDashboard" tabindex="-98">
+                        <option selected disabled>Seleccione una opción</option>
+                        <option><?php if ($isAdmin) echo 'Por Concesionarios';
                                 else {
-                                    echo 'display:none';
-                                } ?>">
-                        Opción: <?= $optionDashboard; ?>
-                    </h5>
-                    <h5>
-                        Fecha Inicio: <?= $fecha_inicio; ?>
-                    </h5>
-                    <h5>
-                        Fecha Fin: <?= $fecha_end; ?>
-                    </h5>
-                </div>
-            </form>
+                                    echo 'Por Tienda';
+                                } ?></option>
+                        <option>Por Campaña y Websites</option>
+                    </select>
+                    <span>Rango de fechas:</span>
+                    <div class="input-daterange input-group" id="kt_datepicker_5">
+                        <input id="initDate" type="text" class="form-control" name="start" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-ellipsis-h"></i>
+                            </span>
+                        </div>
+                        <input id="endDate" type="text" class="form-control" name="end" />
+                    </div>
+                    <span class="form-text text-muted">Seleccione un rango de fechas</span>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <div class="mt-6">
+                        <h5 style="<?php if ($isAdmin) echo 'display:block';
+                                    else {
+                                        echo 'display:none';
+                                    } ?>">
+                            Opción: <?= $optionDashboard; ?>
+                        </h5>
+                        <h5>
+                            Fecha Inicio: <?= $fecha_inicio; ?>
+                        </h5>
+                        <h5>
+                            Fecha Fin: <?= $fecha_end; ?>
+                        </h5>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-5 text-right">
+                <button type="button" class="btn btn-success" onclick="downloadExcelTotales()">Descargar Excel</button>
+            </div>
         </div>
+
         <!--begin::Row-->
         <div class="row">
             <!-- CATALOGO DERCO -->
@@ -480,9 +511,107 @@ if ($_SESSION['user_type'] == 'Administrador') {
         <!--end::Dashboard-->
     </div>
     <!--end::Container-->
+
+    <script type="text/javascript" src="assets/js/pages/custom/xlsx/xlsx.full.min.js"></script>
+
+    <script>
+        var clients = JSON.parse('<?= json_encode($arrayExcel) ?>');
+        console.log('Entro aqui')
+
+        /* let array_leadsnew = array_leads.map(({
+            updateFecha,
+            estado,
+            __v,
+            terms,
+            updated_at,
+            ...keepFields
+        }) => {
+            return {
+                ...keepFields,
+                ...{estado},
+                ...{updateFecha}
+            }
+        }) */
+
+        var array_leadsnew = []
+        for (var i = 0; i < clients.length; i++) {
+            var d = new Date(clients[i].created_at);
+            var n = d.toLocaleString('es-PE');
+            array_leadsnew.push({
+                id: clients[i]._id,
+                id_w2l: clients[i].id_w2l,
+                rut_w2l: clients[i].rut_w2l,
+                first_name: clients[i].first_name,
+                last_name: clients[i].last_name,
+                fone1_w2l: clients[i].fone1_w2l,
+                email: clients[i].email,
+                state: clients[i].state,
+                url1_w2l: clients[i].url1_w2l,
+                url2_w2l: clients[i].url2_w2l,
+                brand_w2l: clients[i].brand_w2l,
+                model_w2l: clients[i].model_w2l,
+                version_w2l: clients[i].version_w2l,
+                sap_w2l: clients[i].sap_w2l,
+                price_w2l: clients[i].price_w2l,
+                local_w2l: clients[i].local_w2l,
+                cod_origen2_w2l: clients[i].cod_origen2_w2l,
+                store: clients[i].store,
+                terms: clients[i].terms,
+                tipo_documento: clients[i].tipo_documento,
+                razon_social: clients[i].razon_social,
+                direccion: clients[i].direccion,
+                distrito: clients[i].distrito,
+                estado: clients[i].estado,
+                created_at: n,
+            })
+        }
+
+        console.log(array_leadsnew)
+
+        function downloadExcelTotales() {
+
+            var createXLSLFormatObj = [];
+            var xlsHeader = ['ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'E-MAIL', 'ESTADO', 'URL FUENTE', 'URL PRINCIPAL', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'DIRECCIÓN', 'DISTRITO', 'ESTADO', 'FECHA DE REGISTRO'];
+
+            var xlsRows = [];
+            xlsRows.push(array_leadsnew);
+
+            createXLSLFormatObj.push(xlsHeader);
+
+            var count = 0;
+
+
+            $.each(xlsRows[0], function(index, value) {
+                var innerRowData = [];
+
+                $.each(value, function(ind, val) {
+                    innerRowData.push(val);
+                });
+
+                count++;
+
+                createXLSLFormatObj.push(innerRowData);
+            });
+
+            var filename = "CES_LEADS.xlsx";
+            var ws_name = "Reporte de LEADS";
+
+            if (typeof console !== 'undefined') console.log(new Date());
+            var wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+
+            if (typeof console !== 'undefined') console.log(new Date());
+            XLSX.writeFile(wb, filename);
+            if (typeof console !== 'undefined') console.log(new Date());
+        }
+    </script>
+
 </div>
 <!--end::Entry-->
-
 
 <!--end::Viejo Cuadro de Dashboard-->
 <?php

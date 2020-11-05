@@ -493,12 +493,12 @@ if ($_SESSION['user_type'] == 'Administrador') {
                             <th scope="col">Título</th>
                             <th scope="col">Total</th>
                             <th scope="col">% Conversiones</th>
-                            <th scope="col">Nuevos</th>
-                            <th scope="col">Contactados</th>
-                            <th scope="col">Cotizados</th>
-                            <th scope="col">Cancelados</th>
+                            <th scope="col">Por gestionar</th>
+                            <th scope="col">Contactado - cerrado</th>
+                            <th scope="col">Contactado - cotizado</th>
+                            <th scope="col">Reservado</th>
                             <th scope="col">Facturados</th>
-                            <th scope="col">Gestionados</th>
+                            <th scope="col">No Contactado</th>
                         </tr>
                     </thead>
                     <tbody>

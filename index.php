@@ -19,6 +19,7 @@ $id_society = $_SESSION["id_society"];
 $user_type = $_SESSION["user_type"];
 $nombre = $_SESSION["user_name"];
 $correo = $_SESSION["user_email"];
+$current_marca = "Todas";
 $array_codigos = $_SESSION["user_stores"];
 if ($user_type == 'Administrador') {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
@@ -173,6 +174,7 @@ if ($user_type == 'Administrador') {
 	<script>
 		//Global Variables
 		var global_current_store_code = '<?php echo $current_store_code; ?>';
+		var global_current_marca = '<?php echo $current_marca; ?>';
 		if (global_current_store_code != '') {
 			global_current_store_code = JSON.parse(global_current_store_code);
 			//console.log("global_current_store_code", global_current_store_code)
@@ -202,11 +204,13 @@ if ($user_type == 'Administrador') {
 			// Private functions
 			var initTableLanding = function() {
 				var global_current_store_code = '<?php echo $current_store_code; ?>';
+				var global_current_marca = '<?php echo $current_marca; ?>';
 				if (global_current_store_code != '') {
 					global_current_store_code = JSON.parse(global_current_store_code);
 					//console.log("global_current_store_code", global_current_store_code)
 				}
 				var code = global_current_store_code; //Variable Global
+				var marca2 = global_current_marca;
 				$('#codeConcesionario').val('Todas');
 
 				var current_landing = '<?php echo $current_landing; ?>';
@@ -250,6 +254,13 @@ if ($user_type == 'Administrador') {
 					params = {
 						...params,
 						store: code
+					}
+				}
+
+				if (marca2 && marca2 !== ''){
+					params = {
+						...params,
+						marca2
 					}
 				}
 
@@ -479,6 +490,7 @@ if ($user_type == 'Administrador') {
 			var getLeads = function() {
 
 				var codeConcesionario = global_current_store_code; //Variable Global
+				var marca2 = global_current_marca;
 
 				console.log("getLeads -> isAdministrador", isAdministrador)
 				//Condicionar para administrador
@@ -503,6 +515,7 @@ if ($user_type == 'Administrador') {
 				}
 
 				code = arrayCodes;
+
 
 
 				var current_landing = '<?php echo $current_landing; ?>';
@@ -549,6 +562,13 @@ if ($user_type == 'Administrador') {
 					params = {
 						...params,
 						store: code
+					}
+				}
+
+				if (marca2 && marca2 !== ''){
+					params = {
+						...params,
+						marca2
 					}
 				}
 
@@ -1400,6 +1420,19 @@ if ($user_type == 'Administrador') {
 		function updateStoreId(store_id) {
 			global_current_store_code = store_id;
 			KTDatatableRemoteAjaxLeads.reloadData();
+		}
+
+		function updateMarca(marca) {
+			console.log(marca)
+			if (marca == 0) global_current_marca = ['suzuki', 'Suzuki'];
+			if (marca == 1) global_current_marca = ['mazda', "Mazda"];
+			if (marca == 2) global_current_marca = ['renault', "Renault"];
+			if (marca == 3) global_current_marca = ['changan', 'Changan'];
+			if (marca == 4) global_current_marca = ['haval', 'Haval'];
+			if (marca == 5) global_current_marca = ['jac', 'Jac'];
+			if (marca == 6) global_current_marca = ['citroen', 'Citroen'];
+			if (marca == 7) global_current_marca = ['greatwall', 'Great Wall'];
+			KTDatatableRemoteAjaxLeads.reloadData(); 
 		}
 
 		function updateStoreIdAmicar(store_id) {

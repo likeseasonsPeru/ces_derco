@@ -26,7 +26,8 @@ if ($user_type == 'Administrador') {
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
 	$current_store_code = '';
 } else {
-	$api_tiendas = 'https://cotizadorderco.com/clients/filter';
+	//$api_tiendas = 'https://cotizadorderco.com/clients/filter';
+	$api_tiendas = 'https://cotizadorderco.com/clients/filterTest';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
 
 	$arrayStoresCES = [];
@@ -288,6 +289,7 @@ if ($user_type == 'Administrador') {
 									}
 									return dataSet;
 								},
+								timeout: 90000,
 							},
 						},
 						pageSize: 50,
@@ -334,7 +336,7 @@ if ($user_type == 'Administrador') {
 
 					// columns definition
 					columns: [{
-						field: 'id',
+						field: '_id',
 						title: '#',
 						sortable: 'asc',
 						width: 30,
@@ -595,6 +597,7 @@ if ($user_type == 'Administrador') {
 									}
 									return dataSet;
 								},
+								timeout: 90000,
 							},
 						},
 						pageSize: 50,
@@ -644,7 +647,7 @@ if ($user_type == 'Administrador') {
 
 					// columns definition
 					columns: [{
-						field: 'id',
+						field: '_id',
 						title: '#',
 						sortable: 'asc',
 						width: 30,

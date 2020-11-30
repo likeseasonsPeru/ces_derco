@@ -23,12 +23,12 @@ $current_marca = "Todas";
 $array_codigos = $_SESSION["user_stores"];
 if ($user_type == 'Administrador') {
 	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
-	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
+	$update_por_tienda = 'https://cotizadorderco.com/clients/filterTest';
 	$current_store_code = '';
 } else {
 	//$api_tiendas = 'https://cotizadorderco.com/clients/filter';
 	$api_tiendas = 'https://cotizadorderco.com/clients/filterTest';
-	$update_por_tienda = 'https://cotizadorderco.com/clients/filter';
+	$update_por_tienda = 'https://cotizadorderco.com/clients/filterTest';
 
 	$arrayStoresCES = [];
 	foreach ($array_codigos as $tienda) {
@@ -336,7 +336,7 @@ if ($user_type == 'Administrador') {
 
 					// columns definition
 					columns: [{
-						field: '_id',
+						field: 'id',
 						title: '#',
 						sortable: 'asc',
 						width: 30,
@@ -647,7 +647,7 @@ if ($user_type == 'Administrador') {
 
 					// columns definition
 					columns: [{
-						field: '_id',
+						field: 'id',
 						title: '#',
 						sortable: 'asc',
 						width: 30,

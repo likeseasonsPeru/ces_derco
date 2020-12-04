@@ -22,7 +22,7 @@ $correo = $_SESSION["user_email"];
 $current_marca = "Todas";
 $array_codigos = $_SESSION["user_stores"];
 if ($user_type == 'Administrador') {
-	$api_tiendas = 'https://cotizadorderco.com/clients/filter-all';
+	$api_tiendas = 'https://cotizadorderco.com/clients/filterTest';
 	$update_por_tienda = 'https://cotizadorderco.com/clients/filterTest';
 	$current_store_code = '';
 } else {
@@ -1457,11 +1457,13 @@ if ($user_type == 'Administrador') {
 
 		function downloadExcel() {
 
-			var createXLSLFormatObj = [];
-			var xlsHeader = ['#', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'DIRECCIÓN', 'DISTRITO', 'ESTADO', ' - ', 'FECHA DE REGISTRO'];
+			var createXLSLFormatObj = [];  // distrito, direccion,  codigo web, codigo de tienda, legales, created_at, 
+			var xlsHeader = ['ESTADO', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'DISTRITO','DIRECCIÓN', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES','FECHA DE REGISTRO', 'FECHA DE ACTUALIZACION'];
 
 			var xlsRows = [];
-			xlsRows.push(dataTableRaw);
+			var dataTableFilter = dataTableRaw.map(({id, updateFecha, ...keepFields}) => keepFields);
+			console.log('La data de la tabla es ',dataTableFilter)
+			xlsRows.push(dataTableFilter);
 
 			createXLSLFormatObj.push(xlsHeader);
 

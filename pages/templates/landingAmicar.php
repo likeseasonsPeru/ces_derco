@@ -41,6 +41,18 @@ $html_code = '';
 					<button type="button" class="btn btn-success" onclick="downloadExcelAmicar()">Descargar Excel</button>
 					</div>
 				</div>
+				<div class="row">
+					
+					<div class="col-12 mt-4">
+						<label for="codeConcesionario">Fecha Inicial: </label>
+						<input style="min-width: 250px;" id="fechaInicialAmicar" type="text" disabled="true">
+					</div>
+					<div class="col-12 mt-4">
+						<label for="codeConcesionario">Fecha Final: </label>
+						<input style="min-width: 250px;" id="fechaFinalAmicar" type="text" disabled="true">
+					</div>
+
+				</div>
 				<div class="datatable datatable-bordered datatable-head-custom" id="kt_datatableAmicar"></div>
 				<!--end: Datatable-->
 			</div>

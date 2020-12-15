@@ -7,7 +7,7 @@ $array_codigos = $_SESSION["user_stores"];
 $tipo_usuario = $_SESSION["user_type"];
 $current_landing = '';
 $current_landing = '';
-
+$current_marca_dashboard = "Todas";
 
 
 function arrayCastRecursive($array)
@@ -106,7 +106,7 @@ curl_setopt_array($curl, array(
     CURLOPT_URL => $url_api2,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => "",
-    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_MAXREDIRS => 0,
     CURLOPT_TIMEOUT => 90,
     CURLOPT_SSL_VERIFYPEER => 0,
     CURLOPT_FOLLOWLOCATION => true,
@@ -586,6 +586,19 @@ if ($_SESSION['user_type'] == 'Administrador') {
             XLSX.writeFile(wb, filename);
             if (typeof console !== 'undefined') console.log(new Date());
         }
+
+        function updateMarcaDashboard(marca) {
+			console.log(marca)
+			if (marca == 0) current_marca_dashboard = ['suzuki', 'Suzuki','SUZUKI'];
+			if (marca == 1) current_marca_dashboard = ['mazda', "Mazda"];
+			if (marca == 2) current_marca_dashboard = ['renault', "Renault"];
+			if (marca == 3) current_marca_dashboard = ['changan', 'Changan'];
+			if (marca == 4) current_marca_dashboard = ['haval', 'Haval'];
+			if (marca == 5) current_marca_dashboard = ['jac', 'Jac'];
+			if (marca == 6) current_marca_dashboard = ['citroen', 'Citroen'];
+			if (marca == 7) current_marca_dashboard = ['greatwall', 'Great Wall'];
+			KTDatatableRemoteAjaxLeads.reloadData(); 
+		}
     </script>
 
 

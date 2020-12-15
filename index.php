@@ -853,6 +853,15 @@ if ($user_type == 'Administrador') {
 
 				var startRange = $('#initDateAmicar').val();
 				var endRangeDate = $('#endDateAmicar').val();
+				$('#fechaInicialAmicar').val(startRange);
+				$('#fechaFinalAmicar').val(endRangeDate);
+
+				if (startRange == '' && endRangeDate == '') {
+					startRange = '<?php echo $initDate; ?>';
+					endRangeDate = '<?php echo $endDate; ?>';
+					$('#fechaInicialAmicar').val(startRange);
+					$('#fechaFinalAmicar').val(endRangeDate);
+				}
 
 				console.log(startRange, endRangeDate);
 
@@ -941,22 +950,31 @@ if ($user_type == 'Administrador') {
 						selector: false,
 						textAlign: 'center',
 					}, {
-						field: 'tipo_doc',
+						field: 'documento',
 						title: 'Documento',
 					}, {
-						field: 'doi',
-						title: 'doi',
+						field: 'oferta',
+						title: 'Oferta',
 					}, {
-						field: 'nombre',
-						title: 'nombre',
+						field: 'cotizando',
+						title: 'Cotizando',
 					}, {
-						field: 'telefono',
-						title: 'telefono',
+						field: 'valor_vehiculo_estimado',
+						title: 'Valor estimado del vehiculo',
+					}, {
+						field: 'marca',
+						title: 'Marca',
+					}, {
+						field: 'celular',
+						title: 'celular',
 					}, {
 						field: 'email',
-						title: 'email',
+						title: 'Email',
 					}, {
-						field: 'fecha_registro',
+						field: 'sucursal',
+						title: 'Sucursal',
+					}, {
+						field: 'fecha_lead',
 						title: 'Creado',
 						autoHide: false,
 						type: 'date',
@@ -1087,6 +1105,8 @@ if ($user_type == 'Administrador') {
 
 				var startRange = $('#initDateAmicar').val();
 				var endRangeDate = $('#endDateAmicar').val();
+				$('#fechaInicialAmicar').val(startRange);
+				$('#fechaFinalAmicar').val(endRangeDate);
 
 				//console.log(current_landing);
 
@@ -1172,22 +1192,31 @@ if ($user_type == 'Administrador') {
 						selector: false,
 						textAlign: 'center',
 					}, {
-						field: 'tipo_doc',
+						field: 'documento',
 						title: 'Documento',
 					}, {
-						field: 'doi',
-						title: 'doi',
+						field: 'oferta',
+						title: 'Oferta',
 					}, {
-						field: 'nombre',
-						title: 'nombre',
+						field: 'cotizando',
+						title: 'Cotizando',
 					}, {
-						field: 'telefono',
-						title: 'telefono',
+						field: 'valor_vehiculo_estimado',
+						title: 'Valor estimado del vehiculo',
+					}, {
+						field: 'marca',
+						title: 'Marca',
+					}, {
+						field: 'celular',
+						title: 'celular',
 					}, {
 						field: 'email',
-						title: 'email',
+						title: 'Email',
 					}, {
-						field: 'fecha_registro',
+						field: 'sucursal',
+						title: 'Sucursal',
+					}, {
+						field: 'fecha_lead',
 						title: 'Creado',
 						autoHide: false,
 						type: 'date',
@@ -1427,7 +1456,7 @@ if ($user_type == 'Administrador') {
 
 		function updateMarca(marca) {
 			console.log(marca)
-			if (marca == 0) global_current_marca = ['suzuki', 'Suzuki'];
+			if (marca == 0) global_current_marca = ['suzuki', 'Suzuki','SUZUKI'];
 			if (marca == 1) global_current_marca = ['mazda', "Mazda"];
 			if (marca == 2) global_current_marca = ['renault', "Renault"];
 			if (marca == 3) global_current_marca = ['changan', 'Changan'];
@@ -1581,7 +1610,7 @@ if ($user_type == 'Administrador') {
 		function downloadExcelAmicar() {
 
 			var createXLSLFormatObj = [];
-			var xlsHeader = ['#', 'TIPO DOCUMENTO', 'DOI', 'LINEA VEHICULAR', 'CUOTA', 'PLAZO', 'NOMBRE', 'TIENDA', 'TELEFONO', 'EMAIL', 'REGISTRO', 'ESTADO'];
+			var xlsHeader = [ 'DOCUMENTO', 'OFERTA', 'FECHA_CREADO', 'COTIZANDO', 'VALOR ESTIMADO DEL VEHICULO', 'EMAIL', 'TELEFONO', 'MARCA', 'SUCURSAL', 'ESTADO'];
 
 			var xlsRows = [];
 
@@ -1594,6 +1623,7 @@ if ($user_type == 'Administrador') {
 				facturado_date,
 				cancelado_date,
 				real_id,
+				fecha_registro,
 				...keepFields
 			}) => keepFields);
 

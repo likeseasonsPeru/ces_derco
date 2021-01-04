@@ -1487,10 +1487,22 @@ if ($user_type == 'Administrador') {
 		function downloadExcel() {
 
 			var createXLSLFormatObj = [];  // distrito, direccion,  codigo web, codigo de tienda, legales, created_at, 
-			var xlsHeader = ['ESTADO', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'DISTRITO','DIRECCIÓN', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES','FECHA DE REGISTRO', 'FECHA DE ACTUALIZACION'];
 
+			var section_title = '<?php echo $section_title; ?>';
+			var arrayMarcas = ['Suzuki', 'Renault', 'Mazda', 'Jac', 'Changan', 'Haval', 'Great Wall']
 			var xlsRows = [];
-			var dataTableFilter = dataTableRaw.map(({id, updateFecha, ...keepFields}) => keepFields);
+			var element = arrayMarcas.findIndex((e) => e == section_title)
+			var xlsHeader = []
+			
+			if (element !== -1){
+				var dataTableFilter = dataTableRaw.map(({id, updateFecha, brand_w2l, ...keepFields}) => keepFields);
+				 xlsHeader = ['ESTADO', 'ID WEB', 'ID W2L', 'TIPO DE DOCUMENTO', 'DNI / RUC', 'RAZÓN SOCIAL', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'E-MAIL', 'URL FUENTE', 'URL PRINCIPAL', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'CÓDIGO DE TIENDA', 'PRECIO', 'PAIS', 'LOCAL', 'DISTRITO','DIRECCIÓN', 'CÓDIGO WEB', 'LEGALES','FECHA DE REGISTRO', 'FECHA DE ACTUALIZACION'];
+			}else {
+				var dataTableFilter = dataTableRaw.map(({id, updateFecha, ...keepFields}) => keepFields);
+				 xlsHeader = ['ESTADO', 'ID WEB', 'ID W2L', 'DNI / RUC', 'NOMBRES', 'APELLIDOS', 'CELULAR', 'TIPO DE DOCUMENTO', 'RAZÓN SOCIAL', 'E-MAIL', 'PAÍS', 'URL FUENTE', 'URL PRINCIPAL', 'FUENTE', 'MARCA', 'MODELO', 'VERSIÓN', 'CÓDIGO SAP', 'PRECIO', 'LOCAL', 'DISTRITO','DIRECCIÓN', 'CÓDIGO WEB', 'CÓDIGO DE TIENDA', 'LEGALES','FECHA DE REGISTRO', 'FECHA DE ACTUALIZACION'];
+			}
+
+			
 			console.log('La data de la tabla es ',dataTableFilter)
 			xlsRows.push(dataTableFilter);
 

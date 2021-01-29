@@ -216,6 +216,7 @@ if ($user_type == 'Administrador') {
 
 				var current_landing = '<?php echo $current_landing; ?>';
 				var current_landing2 = '<?php if(isset($current_landing2)) echo $current_landing2; else echo null;?>';
+				var current_landing3 = '<?php if(isset($current_landing3)) echo $current_landing3; else echo null;?>';
 				var id_cotizador = '';
 
 				var startRange = $('#initDate').val();
@@ -244,6 +245,9 @@ if ($user_type == 'Administrador') {
 					arrayurl1_w2l.push(current_landing);
 					if (current_landing2){
 						arrayurl1_w2l.push(current_landing2);
+					}
+					if (current_landing3){
+						arrayurl1_w2l.push(current_landing3);
 					}
 					params = {
 						...params,
@@ -522,6 +526,7 @@ if ($user_type == 'Administrador') {
 
 				var current_landing = '<?php echo $current_landing; ?>';
 				var current_landing2 = '<?php if(isset($current_landing2)) echo $current_landing2; else echo null;?>';
+				var current_landing3 = '<?php if(isset($current_landing3)) echo $current_landing3; else echo null;?>';
 				var id_cotizador = '';
 
 				var startRange = $('#initDate').val();
@@ -553,6 +558,9 @@ if ($user_type == 'Administrador') {
 					arrayurl1_w2l.push(current_landing);
 					if (current_landing2){
 						arrayurl1_w2l.push(current_landing2);
+					}
+					if (current_landing3){
+						arrayurl1_w2l.push(current_landing3);
 					}
 					params = {
 						...params,

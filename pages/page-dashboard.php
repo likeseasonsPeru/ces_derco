@@ -149,27 +149,27 @@ if ($_SESSION['user_type'] == 'Administrador') {
         $arrayExceptions = array();
         foreach ($nuevo_array as $lead) {
             if ($lead['url1_w2l'] != '') {
-                if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
+                if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/') {
                     array_push($arrayCatalogoDerco, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                     array_push($arrayDercoOulet, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                     array_push($arrayCyberGO, $lead);
-                } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
+                } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe' || $lead['url1_w2l'] == 'https://autos.suzuki.com.pe/') {
                     array_push($arraySuzuki, $lead);
-                } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
+                } else if ($lead['url1_w2l'] == 'https://www.mazda.pe' || $lead['url1_w2l'] == 'https://www.mazda.pe/') {
                     array_push($arrayMazda, $lead);
-                } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
+                } else if ($lead['url1_w2l'] == 'https://www.renault.pe' || $lead['url1_w2l'] == 'https://www.renault.pe/') {
                     array_push($arrayRenault, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
                     array_push($arrayChangan, $lead);
-                } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
+                } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/' || $lead['url1_w2l'] == 'http://haval-client.qa.dercoperu.soho.cl/') {
                     array_push($arrayHaval, $lead);
                 } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
                     array_push($arrayJac, $lead);
                 } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
                     array_push($arrayCitroen, $lead);
-                } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
+                } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe' || $lead['url1_w2l'] == 'https://www.greatwall.com.pe/') {
                     array_push($arrayGreatWall, $lead);
                 } else {
                     array_push($arrayExceptions, $lead);
@@ -177,6 +177,8 @@ if ($_SESSION['user_type'] == 'Administrador') {
                 }
             }
         }
+
+        /* print_r($arrayExceptions); */
 
         $arrayTablaFinal = array();
         array_push($arrayTablaFinal, getData($nuevo_array, 'Total de Leads General'));
@@ -292,27 +294,27 @@ if ($_SESSION['user_type'] == 'Administrador') {
             if ($lead['url1_w2l'] != '' && $lead['store'] != '') {
                 foreach ($array_codigos as $store_code => $key) {
                     if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
-                        if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/') {
+                        if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/') {
                             array_push($arrayCatalogoDerco, $lead);
                         } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                             array_push($arrayDercoOulet, $lead);
                         } else if ($lead['url1_w2l'] == 'https://derco.com.pe/cybergo/') {
                             array_push($arrayCyberGO, $lead);
-                        } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe') {
+                        } else if ($lead['url1_w2l'] == 'https://autos.suzuki.com.pe' || $lead['url1_w2l'] == 'https://autos.suzuki.com.pe/') {
                             array_push($arraySuzuki, $lead);
-                        } else if ($lead['url1_w2l'] == 'https://www.mazda.pe') {
+                        } else if ($lead['url1_w2l'] == 'https://www.mazda.pe' || $lead['url1_w2l'] == 'https://www.mazda.pe/') {
                             array_push($arrayMazda, $lead);
-                        } else if ($lead['url1_w2l'] == 'https://www.renault.pe') {
+                        } else if ($lead['url1_w2l'] == 'https://www.renault.pe' || $lead['url1_w2l'] == 'https://www.renault.pe/') {
                             array_push($arrayRenault, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.changan.com.pe/') {
                             array_push($arrayChangan, $lead);
-                        } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/') {
+                        } else if ($lead['url1_w2l'] == 'https://www.haval.com.pe/' || $lead['url1_w2l'] == 'https://www.haval.com.pe/cotizador/' || $lead['url1_w2l'] == 'http://haval-client.qa.dercoperu.soho.cl/') {
                             array_push($arrayHaval, $lead);
                         } else if ($lead['url1_w2l'] == 'https://www.jac.pe/') {
                             array_push($arrayJac, $lead);
                         } else if ($lead['url1_w2l'] == 'https://citroen.com.pe/ofertas-2/') {
                             array_push($arrayCitroen, $lead);
-                        } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe') {
+                        } else if ($lead['url1_w2l'] == 'https://www.greatwall.com.pe' || $lead['url1_w2l'] == 'https://www.greatwall.com.pe/') {
                             array_push($arrayGreatWall, $lead);
                         } else {
                             array_push($arrayExceptions, $lead);

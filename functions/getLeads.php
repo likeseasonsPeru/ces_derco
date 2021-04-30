@@ -28,7 +28,7 @@ if($_GET)
         $insert = $cnx->query("UPDATE registro_derco_oportunidades SET lead_estado='Facturado', lead_facturado='".date('Y-m-d H:i:s')."' WHERE id='$id_cotizacion'");
     }
 
-    $newURL = 'https://derco.com.pe/plataforma/leads/admin/administrador.php?id='.$id_user;
+    $newURL = 'https://landing.derco.com.pe/plataforma/leads/admin/administrador.php?id='.$id_user;
 
     header('Location: '.$newURL);
 }

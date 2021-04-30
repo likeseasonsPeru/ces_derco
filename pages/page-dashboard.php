@@ -149,7 +149,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
         $arrayExceptions = array();
         foreach ($nuevo_array as $lead) {
             if ($lead['url1_w2l'] != '') {
-                if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/') {
+                if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/' || $lead['url1_w2l'] == 'https://derco.com.pe/') {
                     array_push($arrayCatalogoDerco, $lead);
                 } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                     array_push($arrayDercoOulet, $lead);
@@ -294,7 +294,7 @@ if ($_SESSION['user_type'] == 'Administrador') {
             if ($lead['url1_w2l'] != '' && $lead['store'] != '') {
                 foreach ($array_codigos as $store_code => $key) {
                     if ($lead['store'] == $array_codigos[$store_code]['store_code']) {
-                        if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/') {
+                        if ($lead['url1_w2l'] == 'https://derco.com.pe/catalogo-derco/' || $lead['url1_w2l'] == 'https://derco.com.pe/liquidaciondercocenter/' || $lead['url1_w2l'] == 'https://derco.com.pe/') {
                             array_push($arrayCatalogoDerco, $lead);
                         } else if ($lead['url1_w2l'] == 'https://derco.com.pe/dercoutlet/' || $lead['url1_w2l'] == 'https://derco.com.pe/dercoutletdc/') {
                             array_push($arrayDercoOulet, $lead);
@@ -592,13 +592,13 @@ if ($_SESSION['user_type'] == 'Administrador') {
         function updateMarcaDashboard(marca) {
 			console.log(marca)
 			if (marca == 0) current_marca_dashboard = ['suzuki', 'Suzuki','SUZUKI'];
-			if (marca == 1) current_marca_dashboard = ['mazda', "Mazda"];
-			if (marca == 2) current_marca_dashboard = ['renault', "Renault"];
-			if (marca == 3) current_marca_dashboard = ['changan', 'Changan'];
-			if (marca == 4) current_marca_dashboard = ['haval', 'Haval'];
-			if (marca == 5) current_marca_dashboard = ['jac', 'Jac'];
-			if (marca == 6) current_marca_dashboard = ['citroen', 'Citroen'];
-			if (marca == 7) current_marca_dashboard = ['greatwall', 'Great Wall'];
+			if (marca == 1) current_marca_dashboard = ['mazda', "Mazda", 'MAZDA'];
+			if (marca == 2) current_marca_dashboard = ['renault', "Renault", 'RENAULT'];
+			if (marca == 3) current_marca_dashboard = ['changan', 'Changan', 'CHANGAN'];
+			if (marca == 4) current_marca_dashboard = ['haval', 'Haval', 'HAVAL'];
+			if (marca == 5) current_marca_dashboard = ['jac', 'Jac', 'JAC'];
+			if (marca == 6) current_marca_dashboard = ['citroen', 'Citroen', 'CITROËN', 'CITROEN'];
+			if (marca == 7) current_marca_dashboard = ['greatwall', 'Great Wall', 'GREAT WALL'];
 			KTDatatableRemoteAjaxLeads.reloadData(); 
 		}
     </script>

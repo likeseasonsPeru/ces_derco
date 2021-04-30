@@ -52,7 +52,7 @@ if ($user_type == 'Administrador') {
 	<title>CRM | DERCO PERÚ</title>
 	<meta name="description" content="CRM - DERCO PERÚ es un Dashboard dónde podrán gestionar los leads generados a través de los landings de DERCO PERÚ." />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	<link rel="canonical" href="https://derco.com.pe/plataforma/crm" />
+	<link rel="canonical" href="https://landing.derco.com.pe/plataforma/crm" />
 
 	<!--begin::Fonts-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -884,7 +884,7 @@ if ($user_type == 'Administrador') {
 						type: 'remote',
 						source: {
 							read: {
-								url: 'https://derco.com.pe/catalogo-de-flotas/requests/getAmicarLeads.php',
+								url: 'https://landing.derco.com.pe/catalogo-de-flotas/requests/getAmicarLeads.php',
 								headers: {
 									/* 'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo',  */
 									'Accept': 'application/json',
@@ -1127,7 +1127,7 @@ if ($user_type == 'Administrador') {
 						type: 'remote',
 						source: {
 							read: {
-								url: 'https://derco.com.pe/catalogo-de-flotas/requests/getAmicarLeads.php',
+								url: 'https://landing.derco.com.pe/catalogo-de-flotas/requests/getAmicarLeads.php',
 								headers: {
 									'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRjNjU3ZjVlODc5NTJjMjI2MjBkZTciLCJmaXJzdF9uYW1lIjoiQXJtYW5kbyIsImxhc3RfbmFtZSI6IkVzcGlub3phIiwiZW1haWwiOiJhcm1hbmRvQGxpa2VzZWFzb25zLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHR1OEV2dzRnMkMvQjhydS5rZHMzRS41Q0R0TC5IQXN1SlltSU02QzJ5Z1gwMDhWUkpDbXVTIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJicmFuZCI6IkRFUkNPIiwiY3JlYXRlZF9hdCI6IjIwMTgtMTEtMDJUMTQ6NTU6NTkuNzk5WiIsInVwZGF0ZWRfYXQiOiIyMDE4LTExLTAyVDE0OjU1OjU5Ljc5OVoiLCJfX3YiOjAsImlhdCI6MTYwMDEyMTQ5M30.VkEIh1quxHuCaXLl7xUHVI_JVre1Dq4oYPDirUZchHo',
 									'Accept': 'application/json',
@@ -1436,7 +1436,7 @@ if ($user_type == 'Administrador') {
 			myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
 			$.ajax({
-				url: 'https://derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php',
+				url: 'https://landing.derco.com.pe/catalogo-de-flotas/requests/updateEstadoAmicar.php',
 				type: 'POST',
 				data: {
 					id: id,
@@ -1465,13 +1465,13 @@ if ($user_type == 'Administrador') {
 		function updateMarca(marca) {
 			console.log(marca)
 			if (marca == 0) global_current_marca = ['suzuki', 'Suzuki','SUZUKI'];
-			if (marca == 1) global_current_marca = ['mazda', "Mazda"];
-			if (marca == 2) global_current_marca = ['renault', "Renault"];
-			if (marca == 3) global_current_marca = ['changan', 'Changan'];
-			if (marca == 4) global_current_marca = ['haval', 'Haval'];
-			if (marca == 5) global_current_marca = ['jac', 'Jac'];
-			if (marca == 6) global_current_marca = ['citroen', 'Citroen'];
-			if (marca == 7) global_current_marca = ['greatwall', 'Great Wall'];
+			if (marca == 1) global_current_marca = ['mazda', "Mazda", 'MAZDA'];
+			if (marca == 2) global_current_marca = ['renault', "Renault", 'RENAULT'];
+			if (marca == 3) global_current_marca = ['changan', 'Changan', 'CHANGAN'];
+			if (marca == 4) global_current_marca = ['haval', 'Haval', 'HAVAL'];
+			if (marca == 5) global_current_marca = ['jac', 'Jac', 'JAC'];
+			if (marca == 6) global_current_marca = ['citroen', 'Citroen', 'CITROËN', 'CITROEN'];
+			if (marca == 7) global_current_marca = ['greatwall', 'Great Wall', 'GREAT WALL'];
 			KTDatatableRemoteAjaxLeads.reloadData(); 
 		}
 
